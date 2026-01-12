@@ -176,6 +176,9 @@
   }
 }
 @layer utilities {
+  .mx-4 {
+    margin-inline: calc(var(--spacing) * 4);
+  }
   .mx-auto {
     margin-inline: auto;
   }
@@ -313,6 +316,14 @@
     &::after {
       background-color: var(--color-main-bg);
     }
+    &.secondary {
+      &::before {
+        background-color: var(--color-dark);
+      }
+      &::after {
+        background-color: var(--color-main-bg);
+      }
+    }
     &:active {
       &::before {
         opacity: 0%;
@@ -323,6 +334,12 @@
     height: 30px;
     width: 30px;
     padding: calc(var(--spacing) * 2);
+  }
+  &.pill {
+    height: 17px;
+    width: 17px;
+    border-radius: calc(infinity * 1px);
+    padding: calc(var(--spacing) * 0);
   }
 }
 .chip-base {
@@ -418,12 +435,85 @@
 .select-base {
   position: relative;
   display: block;
-  width: fit-content;
-  border-radius: 11px;
+  width: 195px;
+  border-top-left-radius: 11px;
+  border-top-right-radius: 11px;
+  border-bottom-right-radius: 11px;
+  border-bottom-left-radius: 11px;
   background-color: var(--color-light);
+  padding-inline: calc(var(--spacing) * 4);
+  padding-block: calc(var(--spacing) * 4);
   color: var(--color-dark);
-  .options {
+  &.open {
+    border-bottom-right-radius: 0px;
+    border-bottom-left-radius: 0px;
+    .selected {
+      svg {
+        rotate: 180deg;
+      }
+      ~ .select-body {
+        display: block;
+      }
+    }
+  }
+  .selected {
+    display: flex;
+    width: 100%;
+    cursor: pointer;
+    align-items: center;
+    justify-content: space-between;
+    svg {
+      transition: rotate 0.2s ease-in-out;
+    }
+  }
+  .select-body {
     position: absolute;
+    top: 100%;
+    left: calc(var(--spacing) * 0);
+    width: 100%;
+    border-bottom-right-radius: 11px;
+    border-bottom-left-radius: 11px;
+    background-color: var(--color-light);
+    padding-top: calc(var(--spacing) * 0);
+    padding-bottom: calc(var(--spacing) * 4);
+  }
+  .selected-options {
+    display: flex;
+    flex-direction: column;
+    gap: calc(var(--spacing) * 1);
+    & > :first-child {
+      margin-top: calc(var(--spacing) * 4);
+    }
+    & > :last-child {
+      margin-bottom: calc(var(--spacing) * 4);
+    }
+    .selected-option {
+      display: flex;
+      width: 100%;
+      cursor: pointer;
+      align-items: center;
+      justify-content: space-between;
+      background-color: var(--color-primary);
+      padding-inline: calc(var(--spacing) * 4);
+      padding-block: calc(var(--spacing) * 2);
+      text-align: left;
+    }
+  }
+  .options {
+    display: flex;
+    flex-direction: column;
+    .option {
+      width: 100%;
+      cursor: pointer;
+      padding-inline: calc(var(--spacing) * 4);
+      padding-block: calc(var(--spacing) * 2);
+      text-align: left;
+      &:hover {
+        @media (hover: hover) {
+          background-color: var(--color-primary);
+        }
+      }
+    }
   }
 }
 @property --tw-blur {

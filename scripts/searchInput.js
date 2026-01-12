@@ -7,6 +7,8 @@ function handleFocusInput() {
 
     const handleClearInput = () => {
       input.value = "";
+      clearButton.classList.add("hidden");
+      input.dispatchEvent(new CustomEvent("inputCleared"));
     };
 
     input.addEventListener("focus", () => {
@@ -18,7 +20,6 @@ function handleFocusInput() {
     input.addEventListener("input", () => {
       if (input.value.length === 0) {
         clearButton.removeEventListener("click", handleClearInput);
-        clearButton.classList.add("hidden");
       } else {
         clearButton.addEventListener("click", handleClearInput);
         clearButton.classList.remove("hidden");

@@ -107,7 +107,7 @@
   }
 
   &.icon-button {
-    @apply text-dark stroke-dark  w-[52px] h-[52px];
+    @apply text-dark stroke-dark w-[52px] h-[52px];
     svg {
       @apply mx-auto;
     }
@@ -119,6 +119,15 @@
       @apply bg-main-bg;
     }
 
+    &.secondary {
+      &::before {
+        @apply bg-dark;
+      }
+      &::after {
+        @apply bg-main-bg;
+      }
+    }
+
     &:active {
       &::before {
         @apply opacity-0;
@@ -128,6 +137,10 @@
 
   &.sm {
     @apply p-2  w-[30px] h-[30px];
+  }
+
+  &.pill {
+    @apply rounded-full w-[17px] h-[17px] p-0;
   }
 }
 .chip-base {
@@ -190,8 +203,53 @@
   }
 }
 .select-base {
-  @apply relative rounded-[11px] bg-light text-dark block w-fit;
+  @apply relative rounded-t-[11px] rounded-b-[11px] bg-light text-dark block px-4 py-4 w-[195px];
+
+  &.open {
+    @apply rounded-b-[0px];
+
+    .selected {
+      svg {
+        @apply rotate-180;
+      }
+      ~ .select-body {
+        @apply block;
+      }
+    }
+  }
+
+  .selected {
+    @apply flex items-center justify-between w-full cursor-pointer;
+
+    svg {
+      transition: rotate 0.2s ease-in-out;
+    }
+  }
+
+  .select-body {
+    @apply absolute top-full left-0 bg-light w-full rounded-b-[11px] pb-4 pt-0;
+  }
+
+  .selected-options {
+    @apply flex gap-1 flex-col;
+
+    & > :first-child {
+      @apply mt-4;
+    }
+    & > :last-child {
+      @apply mb-4;
+    }
+
+    .selected-option {
+      @apply cursor-pointer px-4  py-2 w-full text-left bg-primary flex items-center justify-between;
+    }
+  }
+
   .options {
-    @apply absolute;
+    @apply flex flex-col;
+
+    .option {
+      @apply cursor-pointer px-4 py-2 w-full text-left hover:bg-primary;
+    }
   }
 }
