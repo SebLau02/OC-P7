@@ -1,0 +1,25 @@
+{
+  "name": "purestatic-app",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "concurrently \"vite\" \"npx @tailwindcss/cli -i ./styles/input.css -o ./styles/output.css --watch\"",
+    "build": "vite build",
+    "preview": "pnpm dlx serve dist"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@tailwindcss/postcss": "^4.1.17",
+    "postcss": "^8.5.6",
+    "tailwindcss": "^4.1.17"
+  },
+  "devDependencies": {
+    "concurrently": "^9.2.1",
+    "vite": "^7.2.4",
+    "vite-plugin-virtual-html": "^1.2.7"
+  }
+}

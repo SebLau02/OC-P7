@@ -1,0 +1,197 @@
+@import url("https://fonts.googleapis.com/css2?family=Anton&family=Manrope:wght@200..800&display=swap");
+
+@import "tailwindcss";
+
+@theme {
+  --font-body: Manrope;
+  --font-title: Anton;
+
+  --color-main-bg: #ededed;
+  --color-light: #ffffff;
+  --color-dark: #000000;
+  --color-secondary: #1b1b1b;
+  --color-primary: #ffd15b;
+  --color-border: #c6c6c6;
+}
+
+.text-h1 {
+  @apply text-[44px] font-title;
+}
+.text-body1 {
+  @apply text-base font-body;
+}
+.text-body2 {
+  @apply text-sm font-body;
+}
+.text-body3 {
+  @apply text-xs font-body;
+}
+.button-base {
+  @apply rounded-[10px] p-3 overflow-hidden relative cursor-pointer bg-transparent text-dark stroke-dark;
+
+  &::before {
+    @apply w-full h-full bg-primary;
+
+    position: absolute;
+    z-index: 0;
+    content: "";
+    top: 0;
+    left: 0;
+    display: block;
+    opacity: 1;
+    transition: opacity 0.2s ease-in-out;
+  }
+  &::after {
+    @apply w-full h-full bg-secondary;
+
+    position: absolute;
+    z-index: 0;
+    content: "";
+    top: 0;
+    left: 0;
+    display: block;
+    opacity: 0;
+    transition: opacity 0.2s ease-in-out;
+  }
+
+  svg {
+    * {
+      @apply text-inherit stroke-inherit;
+    }
+  }
+
+  &:hover {
+    @apply text-light stroke-light;
+
+    &::after {
+      opacity: 1;
+    }
+    &::before {
+      opacity: 0;
+    }
+  }
+
+  &:active {
+    @apply text-dark stroke-dark;
+
+    &::after {
+      opacity: 0;
+    }
+    &::before {
+      opacity: 1;
+    }
+  }
+
+  &.secondary {
+    svg {
+      * {
+        @apply text-light stroke-light;
+      }
+    }
+    &::before {
+      @apply bg-secondary;
+    }
+    &::after {
+      @apply bg-primary;
+    }
+    &:hover {
+      * {
+        @apply text-dark stroke-dark;
+      }
+    }
+    &:active {
+      * {
+        @apply text-light stroke-light;
+      }
+    }
+  }
+
+  &.icon-button {
+    @apply text-dark stroke-dark  w-[52px] h-[52px];
+    svg {
+      @apply mx-auto;
+    }
+
+    &::before {
+      @apply bg-light;
+    }
+    &::after {
+      @apply bg-main-bg;
+    }
+
+    &:active {
+      &::before {
+        @apply opacity-0;
+      }
+    }
+  }
+
+  &.sm {
+    @apply p-2  w-[30px] h-[30px];
+  }
+}
+.chip-base {
+  @apply rounded-[14px] px-[15px] py-[5px] text-sm font-body bg-dark bg-primary inline-block;
+
+  .secondary {
+    @apply bg-secondary text-light;
+  }
+}
+.icon {
+  @apply relative z-1;
+
+  &.dark {
+    stroke: #000000;
+    * {
+      @apply stroke-inherit;
+    }
+  }
+}
+.input-base {
+  @apply rounded-[11px];
+  &.sm {
+    @apply rounded-[2px];
+  }
+}
+.search-input-base {
+  @apply pl-[8px] flex items-center justify-between bg-light border border-border;
+  input {
+    @apply w-full bg-transparent outline-none text-sm h-[34px];
+  }
+  &.focused {
+    @apply outline outline-1 outline-secondary;
+  }
+  .end-adornment {
+    @apply flex gap-1 mx-[8px] relative;
+
+    .clear-button {
+      position: absolute;
+      left: 0;
+      top: 0;
+      translate: -100% 0%;
+    }
+  }
+}
+.search-bar {
+  @apply pl-[10px] w-[954px] border-none;
+
+  input {
+    @apply h-[72px]  text-base;
+  }
+  .end-adornment {
+    @apply flex gap-1 mx-[8px] relative;
+
+    .clear-button {
+      position: absolute;
+      left: -10px;
+      top: 0;
+      translate: -100% 0%;
+    }
+  }
+}
+.select-base {
+  @apply relative rounded-[11px] bg-light text-dark block w-fit;
+  .options {
+    @apply absolute;
+  }
+}
