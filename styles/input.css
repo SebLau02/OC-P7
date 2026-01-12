@@ -12,11 +12,16 @@
   --color-secondary: #1b1b1b;
   --color-primary: #ffd15b;
   --color-border: #c6c6c6;
+  --color-grey: #7a7a7a;
 }
 
 .text-h1 {
   @apply text-[44px] font-title;
 }
+.text-h3 {
+  @apply text-[18px] font-title;
+}
+
 .text-body1 {
   @apply text-base font-body;
 }
@@ -250,6 +255,33 @@
 
     .option {
       @apply cursor-pointer px-4 py-2 w-full text-left hover:bg-primary;
+    }
+  }
+}
+
+.recipe-card {
+  @apply max-w-[380px] bg-light rounded-[21px] overflow-hidden;
+
+  .recipe-image-container {
+    @apply h-[253px] w-full relative;
+    img {
+      @apply object-cover w-full h-full;
+    }
+  }
+
+  .recipe-content {
+    @apply w-[330px] mx-auto mb-4;
+
+    h3.text-h3 {
+      @apply my-4;
+    }
+
+    h4.text-body3 {
+      @apply my-4;
+    }
+
+    .ingredients-grid {
+      @apply grid grid-cols-2 gap-4;
     }
   }
 }
