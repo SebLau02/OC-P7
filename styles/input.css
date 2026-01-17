@@ -282,7 +282,8 @@
   }
 
   .select-body {
-    @apply absolute top-full left-0 bg-light w-full rounded-b-[11px] pb-4 pt-0 z-10;
+    @apply absolute top-full left-0 bg-light w-full max-h-[259px] overflow-y-auto rounded-b-[11px] pb-4 pt-0 z-10;
+    scrollbar-width: thin;
   }
 
   .selected-options {
