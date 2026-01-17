@@ -6,9 +6,7 @@ const recipeCount = document.getElementById("recipe-count");
 const emptyResult = document.getElementById("empty-result");
 
 async function recipes() {
-  //   const recipes = await getRecipes();
-
-  const recipes = [];
+  const recipes = await getRecipes();
 
   const fragment = document.createDocumentFragment();
   recipes.forEach((recipe) => {
