@@ -314,6 +314,9 @@
     img {
       @apply object-cover w-full h-full;
     }
+    div.chip-base {
+      @apply absolute top-5 right-5;
+    }
   }
 
   .recipe-content {

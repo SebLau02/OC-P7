@@ -617,6 +617,11 @@
       width: 100%;
       object-fit: cover;
     }
+    div.chip-base {
+      position: absolute;
+      top: calc(var(--spacing) * 5);
+      right: calc(var(--spacing) * 5);
+    }
   }
   .recipe-content {
     margin-inline: auto;
