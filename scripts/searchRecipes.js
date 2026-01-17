@@ -1,4 +1,5 @@
 import { RecipeCard } from "./components/recipeCard";
+import { createOptionElement } from "./components/select";
 import { RECIPES } from "./constants";
 
 const searchRecipeInput = document.getElementById("search-recipe");
@@ -38,6 +39,8 @@ function recipesFiltered(search) {
     return nameMatch || descriptionMatch || ingredientsMatch;
   });
 
+  setSelectOptions(filteredRecipes);
+
   const fragment = document.createDocumentFragment();
   filteredRecipes.forEach((recipe) => {
     const recipeCard = RecipeCard({ recipe });
@@ -60,4 +63,27 @@ function recipesFiltered(search) {
   }
 }
 
-export { searchRecipes };
+function setSelectOptions(recipes) {
+  const selectsOptions = {
+    ingredients: new Set(),
+    appliances: new Set(),
+    ustensils: new Set(),
+  };
+  recipes.forEach((recipe) => {
+    recipe.ingredients.forEach((ing) =>
+      selectsOptions.ingredients.add(ing.ingredient),
+    );
+    selectsOptions.appliances.add(recipe.appliance);
+    recipe.ustensils.forEach((ust) => selectsOptions.ustensils.add(ust));
+  });
+
+  Object.entries(selectsOptions).forEach(([k, v]) => {
+    const optionsContainer = document.querySelector(`#select-${k} .options`);
+    optionsContainer.innerHTML = "";
+    const options = [...v].map((o) => ({ label: o, value: o }));
+    const optionsFragment = createOptionElement(options);
+    optionsContainer.appendChild(optionsFragment);
+  });
+}
+
+export { searchRecipes, setSelectOptions };

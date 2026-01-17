@@ -45,15 +45,9 @@ function Select({ label = "Label", options = [] }) {
   optionsContainer.setAttribute("class", "options");
 
   // create options
-  options.forEach((option) => {
-    const optionLi = document.createElement("li");
-    const optionButton = document.createElement("button");
-    optionButton.setAttribute("class", "option text-body2");
-    optionButton.setAttribute("data-value", option.value);
-    optionButton.textContent = option.label;
-    optionLi.appendChild(optionButton);
-    optionsContainer.appendChild(optionLi);
-  });
+  const optionsFregment = createOptionElement(options);
+  optionsContainer.appendChild(optionsFregment);
+
   SelectBody.appendChild(optionsContainer);
 
   selectContainer.appendChild(labelButton);
@@ -196,4 +190,24 @@ function SetUpPresentSelectsBehavior() {
   });
 }
 
-export { Select, SetUpPresentSelectsBehavior, handleSelectInput };
+function createOptionElement(options) {
+  const fragment = document.createDocumentFragment();
+
+  options.forEach((option) => {
+    const optionLi = document.createElement("li");
+    const optionButton = document.createElement("button");
+    optionButton.setAttribute("class", "option text-body2");
+    optionButton.setAttribute("data-value", option.value);
+    optionButton.textContent = option.label;
+    optionLi.appendChild(optionButton);
+    fragment.appendChild(optionLi);
+  });
+  return fragment;
+}
+
+export {
+  Select,
+  SetUpPresentSelectsBehavior,
+  handleSelectInput,
+  createOptionElement,
+};
