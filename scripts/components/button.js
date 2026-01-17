@@ -1,14 +1,15 @@
+import { mediumCrossIcon } from "../constants";
+
+const ButtonMap = new Map();
+
 /**
- *
+ * Creates a button element.
  * @param {string | html node} children
  * @param {html node} endAdornment
  * @param {"contained" | "outlined"} variant
  * @param {boolean} deletable
  * @returns {html node} button
  */
-
-import { mediumCrossIcon } from "../constants";
-
 function Button({
   children = "",
   endAdornment = null,
@@ -38,10 +39,49 @@ function Button({
     } else {
       iconButton.innerHTML = mediumCrossIcon;
     }
+
+    // start listeners for icon button
+    const iconListeners = {
+      click: StopPropagationListener,
+      mousedown: (e) => {
+        StopPropagationEffectListener(e, button);
+      },
+      mouseup: (e) => {
+        AddPropagationEffectListener(e, button);
+      },
+      removeElement: () => {
+        iconButton.removeEventListener("click", iconListeners.click);
+        iconButton.removeEventListener("mousedown", iconListeners.mousedown);
+        iconButton.removeEventListener("mouseup", iconListeners.mouseup);
+        button.remove();
+        ButtonMap.delete(iconButton);
+      },
+    };
+    ButtonMap.set(iconButton, iconListeners);
+
+    iconButton.addEventListener("click", iconListeners.click);
+    iconButton.addEventListener("mousedown", iconListeners.mousedown);
+    iconButton.addEventListener("mouseup", iconListeners.mouseup);
+    // end listeners for icon button
+
     endAdornmentContainer.appendChild(iconButton);
     button.appendChild(endAdornmentContainer);
   }
   return button;
 }
 
-export default Button;
+function StopPropagationListener(e) {
+  e.stopPropagation();
+}
+function StopPropagationEffectListener(e, button) {
+  e.stopPropagation();
+
+  button.classList.add("not-active");
+}
+function AddPropagationEffectListener(e, button) {
+  e.stopPropagation();
+
+  button.classList.remove("not-active");
+}
+
+export { Button, ButtonMap };

@@ -69,6 +69,7 @@
     @apply pl-[18px] py-[17px] pr-0 min-w-[100px];
     span {
       @apply relative z-1 mr-[18px];
+      user-select: none;
     }
   }
   &:hover {
@@ -100,6 +101,32 @@
     .end-adornment {
       * {
         @apply text-dark stroke-dark;
+      }
+    }
+  }
+  &.not-active {
+    &:active {
+      @apply text-light stroke-light;
+
+      &::after {
+        opacity: 1;
+      }
+      &::before {
+        opacity: 0;
+      }
+      .end-adornment {
+        * {
+          @apply text-dark stroke-dark;
+
+          &::after {
+            opacity: 0;
+            z-index: 1;
+          }
+          &::before {
+            opacity: 1;
+            z-index: 1;
+          }
+        }
       }
     }
   }
