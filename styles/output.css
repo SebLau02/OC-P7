@@ -238,6 +238,7 @@
   &::before {
     height: 100%;
     width: 100%;
+    border-radius: 10px;
     background-color: var(--color-primary);
     position: absolute;
     z-index: 0;
@@ -251,6 +252,7 @@
   &::after {
     height: 100%;
     width: 100%;
+    border-radius: 10px;
     background-color: var(--color-secondary);
     position: absolute;
     z-index: 0;
@@ -267,6 +269,17 @@
       color: inherit;
     }
   }
+  &.contained {
+    min-width: 100px;
+    padding-block: 17px;
+    padding-right: calc(var(--spacing) * 0);
+    padding-left: 18px;
+    span {
+      position: relative;
+      z-index: 1;
+      margin-right: 18px;
+    }
+  }
   &:hover {
     stroke: var(--color-light);
     color: var(--color-light);
@@ -275,6 +288,12 @@
     }
     &::before {
       opacity: 0;
+    }
+    .end-adornment {
+      * {
+        stroke: var(--color-light);
+        color: var(--color-light);
+      }
     }
   }
   &:active {
@@ -285,6 +304,12 @@
     }
     &::before {
       opacity: 1;
+    }
+    .end-adornment {
+      * {
+        stroke: var(--color-dark);
+        color: var(--color-dark);
+      }
     }
   }
   &.secondary {
@@ -351,6 +376,11 @@
     width: 17px;
     border-radius: calc(infinity * 1px);
     padding: calc(var(--spacing) * 0);
+  }
+  .end-adornment {
+    margin-right: 10px;
+    margin-left: 34px;
+    display: inline-block;
   }
 }
 .chip-base {
@@ -481,6 +511,7 @@
     position: absolute;
     top: 100%;
     left: calc(var(--spacing) * 0);
+    z-index: 10;
     width: 100%;
     border-bottom-right-radius: 11px;
     border-bottom-left-radius: 11px;

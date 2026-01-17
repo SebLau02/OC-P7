@@ -35,7 +35,7 @@
   @apply rounded-[10px] p-3 overflow-hidden relative cursor-pointer bg-transparent text-dark stroke-dark;
 
   &::before {
-    @apply w-full h-full bg-primary;
+    @apply w-full h-full bg-primary rounded-[10px];
 
     position: absolute;
     z-index: 0;
@@ -47,7 +47,7 @@
     transition: opacity 0.2s ease-in-out;
   }
   &::after {
-    @apply w-full h-full bg-secondary;
+    @apply w-full h-full bg-secondary rounded-[10px];
 
     position: absolute;
     z-index: 0;
@@ -65,6 +65,12 @@
     }
   }
 
+  &.contained {
+    @apply pl-[18px] py-[17px] pr-0 min-w-[100px];
+    span {
+      @apply relative z-1 mr-[18px];
+    }
+  }
   &:hover {
     @apply text-light stroke-light;
 
@@ -73,6 +79,12 @@
     }
     &::before {
       opacity: 0;
+    }
+
+    .end-adornment {
+      * {
+        @apply text-light stroke-light;
+      }
     }
   }
 
@@ -84,6 +96,11 @@
     }
     &::before {
       opacity: 1;
+    }
+    .end-adornment {
+      * {
+        @apply text-dark stroke-dark;
+      }
     }
   }
 
@@ -146,6 +163,9 @@
 
   &.pill {
     @apply rounded-full w-[17px] h-[17px] p-0;
+  }
+  .end-adornment {
+    @apply inline-block ml-[34px] mr-[10px];
   }
 }
 .chip-base {
@@ -232,7 +252,7 @@
   }
 
   .select-body {
-    @apply absolute top-full left-0 bg-light w-full rounded-b-[11px] pb-4 pt-0;
+    @apply absolute top-full left-0 bg-light w-full rounded-b-[11px] pb-4 pt-0 z-10;
   }
 
   .selected-options {
