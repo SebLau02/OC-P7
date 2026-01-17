@@ -3,6 +3,7 @@
 import { Button } from "./components/button.js";
 import { Select, SetUpPresentSelectsBehavior } from "./components/select.js";
 import { SearchInput, handleFocusInput } from "./components/searchInput.js";
+import { Chip } from "./components/chip.js";
 
 const button = Button({
   children: "Coco",
@@ -30,6 +31,11 @@ const Search = SearchInput({
 });
 
 document.body.appendChild(Search);
+
+const chip = Chip({ label: "Test Chip" });
+document.body.appendChild(chip);
+const chipSSecondary = Chip({ label: "Test Chip", color: "secondary" });
+document.body.appendChild(chipSSecondary);
 
 SetUpPresentSelectsBehavior();
 handleFocusInput();

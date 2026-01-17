@@ -198,7 +198,7 @@
 .chip-base {
   @apply rounded-[14px] px-[15px] py-[5px] text-sm font-body bg-dark bg-primary inline-block;
 
-  .secondary {
+  &.secondary {
     @apply bg-secondary text-light;
   }
 }
