@@ -361,13 +361,16 @@
             </div>
           </div>
         </div>
-        <p class="text-h2">1500 recettes</p>
+        <p class="text-h2" id="recipe-count">1500 recettes</p>
       </div>
 
       <div
         id="result-container"
         class="flex justify-between flex-wrap flex-row max-w-[1232px] mx-auto items-center mt-14 gap-y-16"
       ></div>
+      <p class="text-body1 text-center hidden" id="empty-result">
+        Aucune recette ne contient {{search}}, vous pouvez chercher {{suggest}}
+      </p>
     </main>
     <script src="./scripts/main.js" type="module" loading="lazy"></script>
   </body>
