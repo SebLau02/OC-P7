@@ -1,7 +1,7 @@
 import { SetUpPresentSelectsBehavior } from "./components/select.js";
 import { handleFocusInput } from "./components/searchInput.js";
-import { getRecipes } from "./fetchData.js";
 import { recipes } from "./recipes.js";
+import { searchRecipes } from "./searchRecipes.js";
 
 // const button = Button({
 //   children: "Coco",
@@ -75,6 +75,7 @@ import { recipes } from "./recipes.js";
 
 document.addEventListener("DOMContentLoaded", () => {
   recipes();
+  searchRecipes();
   SetUpPresentSelectsBehavior();
   handleFocusInput();
 });
