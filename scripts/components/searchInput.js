@@ -64,7 +64,7 @@ function handleClearInput(element) {
   const input = element.querySelector("input");
   const clearButton = element.querySelector(".clear-button");
 
-  const handleClearInput = () => {
+  const clearInput = () => {
     input.value = "";
     clearButton.classList.add("hidden");
     input.dispatchEvent(new CustomEvent("inputCleared"));
@@ -73,9 +73,10 @@ function handleClearInput(element) {
   const inputListeners = {
     input: () => {
       if (input.value.length === 0) {
-        clearButton.removeEventListener("click", handleClearInput);
+        clearButton.removeEventListener("click", clearInput);
+        clearButton.classList.add("hidden");
       } else {
-        clearButton.addEventListener("click", handleClearInput);
+        clearButton.addEventListener("click", clearInput);
         clearButton.classList.remove("hidden");
       }
     },
@@ -89,7 +90,7 @@ function handleClearInput(element) {
       input.removeEventListener("focus", inputListeners.focus);
       input.removeEventListener("blur", inputListeners.blur);
       input.removeEventListener("input", inputListeners.input);
-      clearButton.removeEventListener("click", handleClearInput);
+      clearButton.removeEventListener("click", clearInput);
       SearchInputMap.delete(element);
       element.remove();
     },
