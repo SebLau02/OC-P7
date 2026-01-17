@@ -10,13 +10,18 @@ const defaultProps = {
 };
 
 function SearchInput({ props = {} || defaultProps }) {
+  const { class: customClass, ...rest } = props; // exclude class from props
+
   const inputContainer = document.createElement("div");
-  inputContainer.setAttribute("class", "search-input-base input-base");
+  inputContainer.setAttribute(
+    "class",
+    `search-input-base input-base ${customClass} `,
+  );
 
   const input = document.createElement("input");
 
   // spread input props
-  const mergedProps = { ...defaultProps, ...props };
+  const mergedProps = { ...defaultProps, ...rest };
   Object.entries(mergedProps).forEach(([k, v]) => {
     input.setAttribute(k, v);
   });
