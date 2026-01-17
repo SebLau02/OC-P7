@@ -177,6 +177,24 @@
   }
 }
 @layer utilities {
+  .absolute {
+    position: absolute;
+  }
+  .relative {
+    position: relative;
+  }
+  .top-1\/2 {
+    top: calc(1/2 * 100%);
+  }
+  .top-14 {
+    top: calc(var(--spacing) * 14);
+  }
+  .left-1\/2 {
+    left: calc(1/2 * 100%);
+  }
+  .left-10 {
+    left: calc(var(--spacing) * 10);
+  }
   .container {
     width: 100%;
     @media (width >= 40rem) {
@@ -201,17 +219,85 @@
   .mx-auto {
     margin-inline: auto;
   }
+  .mt-5 {
+    margin-top: calc(var(--spacing) * 5);
+  }
+  .mt-6 {
+    margin-top: calc(var(--spacing) * 6);
+  }
+  .mt-14 {
+    margin-top: calc(var(--spacing) * 14);
+  }
+  .flex {
+    display: flex;
+  }
   .hidden {
     display: none;
+  }
+  .h-\[477px\] {
+    height: 477px;
+  }
+  .h-full {
+    height: 100%;
+  }
+  .w-full {
+    width: 100%;
+  }
+  .max-w-\[207px\] {
+    max-width: 207px;
+  }
+  .max-w-\[954px\] {
+    max-width: 954px;
+  }
+  .max-w-\[1232px\] {
+    max-width: 1232px;
   }
   .max-w-\[1440px\] {
     max-width: 1440px;
   }
+  .translate-x-\[-50\%\] {
+    --tw-translate-x: -50%;
+    translate: var(--tw-translate-x) var(--tw-translate-y);
+  }
+  .translate-y-\[-50\%\] {
+    --tw-translate-y: -50%;
+    translate: var(--tw-translate-x) var(--tw-translate-y);
+  }
+  .flex-col {
+    flex-direction: column;
+  }
+  .flex-row {
+    flex-direction: row;
+  }
+  .flex-wrap {
+    flex-wrap: wrap;
+  }
+  .items-center {
+    align-items: center;
+  }
+  .justify-between {
+    justify-content: space-between;
+  }
+  .gap-\[33px\] {
+    gap: 33px;
+  }
+  .gap-y-16 {
+    row-gap: calc(var(--spacing) * 16);
+  }
   .bg-main-bg {
     background-color: var(--color-main-bg);
   }
+  .object-cover {
+    object-fit: cover;
+  }
+  .text-center {
+    text-align: center;
+  }
   .text-grey {
     color: var(--color-grey);
+  }
+  .text-primary {
+    color: var(--color-primary);
   }
   .uppercase {
     text-transform: uppercase;
@@ -220,10 +306,42 @@
     --tw-blur: blur(8px);
     filter: var(--tw-blur,) var(--tw-brightness,) var(--tw-contrast,) var(--tw-grayscale,) var(--tw-hue-rotate,) var(--tw-invert,) var(--tw-saturate,) var(--tw-sepia,) var(--tw-drop-shadow,);
   }
+  .sm\:flex-row {
+    @media (width >= 40rem) {
+      flex-direction: row;
+    }
+  }
+  .sm\:gap-\[66px\] {
+    @media (width >= 40rem) {
+      gap: 66px;
+    }
+  }
+  .md\:h-\[667px\] {
+    @media (width >= 48rem) {
+      height: 667px;
+    }
+  }
+  .md\:flex-row {
+    @media (width >= 48rem) {
+      flex-direction: row;
+    }
+  }
+  .md\:gap-\[0\] {
+    @media (width >= 48rem) {
+      gap: 0;
+    }
+  }
 }
 .text-h1 {
   font-family: var(--font-title);
-  font-size: 44px;
+  font-size: 32px;
+  @media (width >= 48rem) {
+    font-size: 44px;
+  }
+}
+.text-h2 {
+  font-family: var(--font-title);
+  font-size: 21px;
 }
 .text-h3 {
   font-family: var(--font-title);
@@ -496,7 +614,7 @@
   }
 }
 .search-bar {
-  width: 954px;
+  width: 100%;
   --tw-border-style: none;
   border-style: none;
   padding-left: 10px;
@@ -604,7 +722,8 @@
   }
 }
 .recipe-card {
-  max-width: 380px;
+  height: 731px;
+  width: 380px;
   overflow: hidden;
   border-radius: 21px;
   background-color: var(--color-light);
@@ -625,8 +744,10 @@
   }
   .recipe-content {
     margin-inline: auto;
-    margin-bottom: calc(var(--spacing) * 4);
+    max-height: 456px;
     width: 330px;
+    overflow-y: auto;
+    scrollbar-width: thin;
     h3.text-h3 {
       margin-block: calc(var(--spacing) * 4);
     }
@@ -639,6 +760,21 @@
       gap: calc(var(--spacing) * 4);
     }
   }
+}
+@property --tw-translate-x {
+  syntax: "*";
+  inherits: false;
+  initial-value: 0;
+}
+@property --tw-translate-y {
+  syntax: "*";
+  inherits: false;
+  initial-value: 0;
+}
+@property --tw-translate-z {
+  syntax: "*";
+  inherits: false;
+  initial-value: 0;
 }
 @property --tw-blur {
   syntax: "*";
@@ -706,6 +842,9 @@
 @layer properties {
   @supports ((-webkit-hyphens: none) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color:rgb(from red r g b)))) {
     *, ::before, ::after, ::backdrop {
+      --tw-translate-x: 0;
+      --tw-translate-y: 0;
+      --tw-translate-z: 0;
       --tw-blur: initial;
       --tw-brightness: initial;
       --tw-contrast: initial;

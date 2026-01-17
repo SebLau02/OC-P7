@@ -16,7 +16,10 @@
 }
 
 .text-h1 {
-  @apply text-[44px] font-title;
+  @apply text-[32px] md:text-[44px] font-title;
+}
+.text-h2 {
+  @apply text-[21px] font-title;
 }
 .text-h3 {
   @apply text-[18px] font-title;
@@ -238,7 +241,7 @@
   }
 }
 .search-bar {
-  @apply pl-[10px] w-[954px] border-none;
+  @apply pl-[10px] w-full border-none;
 
   input {
     @apply h-[72px]  text-base;
@@ -307,7 +310,7 @@
 }
 
 .recipe-card {
-  @apply max-w-[380px] bg-light rounded-[21px] overflow-hidden;
+  @apply w-[380px] bg-light rounded-[21px] overflow-hidden h-[731px];
 
   .recipe-image-container {
     @apply h-[253px] w-full relative;
@@ -320,7 +323,8 @@
   }
 
   .recipe-content {
-    @apply w-[330px] mx-auto mb-4;
+    @apply w-[330px] mx-auto max-h-[456px] overflow-y-auto;
+    scrollbar-width: thin;
 
     h3.text-h3 {
       @apply my-4;

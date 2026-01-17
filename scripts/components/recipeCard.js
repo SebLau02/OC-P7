@@ -12,6 +12,7 @@ function RecipeCard({ recipe }) {
   const recipeImage = document.createElement("img");
   recipeImage.setAttribute("src", `./assets/${image}`);
   recipeImage.setAttribute("alt", `${name}`);
+  recipeImage.setAttribute("loading", "lazy");
   imageContainer.appendChild(recipeImage);
 
   // create chip for time
