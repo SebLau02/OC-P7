@@ -45,7 +45,10 @@ function Select({ label = "Label", options = [] }) {
   optionsContainer.setAttribute("class", "options");
 
   // create options
-  const optionsFregment = createOptionElement(options);
+  const optionsFregment = createOptionElement(
+    selectedoptionsContainer,
+    options,
+  );
   optionsContainer.appendChild(optionsFregment);
 
   SelectBody.appendChild(optionsContainer);
@@ -106,7 +109,7 @@ function handleSelectInput(select) {
     input: (e) => {
       const searchValue = e.target.value.toLowerCase();
 
-      Array.from(options).forEach((option) => {
+      Array.from(select.querySelectorAll(".option")).forEach((option) => {
         if (searchValue === "") {
           option.classList.remove("hidden");
         }
@@ -117,7 +120,7 @@ function handleSelectInput(select) {
       });
     },
     inputCleared: (e) => {
-      Array.from(options).forEach((option) => {
+      Array.from(select.querySelectorAll(".option")).forEach((option) => {
         option.classList.remove("hidden");
       });
     },
@@ -152,6 +155,8 @@ function handleClickOption(selectedoptionsContainer, option) {
   if (selectedOptionsValues.includes(option.dataset.value)) {
     return;
   }
+
+  // create new selected option element
   const newLi = document.createElement("li");
   const newSelection = document.createElement("div");
   newSelection.setAttribute("class", "selected-option text-body2");
@@ -181,16 +186,21 @@ function handleClickOption(selectedoptionsContainer, option) {
 
   newLi.appendChild(newSelection);
   selectedoptionsContainer.appendChild(newLi);
+
+  // filter recipes
+
+  console.log("start to filter recipes");
 }
 // set up for present selects in the DOM
-const selects = document.querySelectorAll(".select-base");
 function SetUpPresentSelectsBehavior() {
+  const selects = document.querySelectorAll(".select-base");
+
   Array.from(selects).forEach((select) => {
     handleSelectInput(select);
   });
 }
 
-function createOptionElement(options) {
+function createOptionElement(selectedOptionsContainer, options) {
   const fragment = document.createDocumentFragment();
 
   options.forEach((option) => {
@@ -199,6 +209,19 @@ function createOptionElement(options) {
     optionButton.setAttribute("class", "option text-body2");
     optionButton.setAttribute("data-value", option.value);
     optionButton.textContent = option.label;
+
+    const optionListeners = {
+      click: () => handleClickOption(selectedOptionsContainer, optionButton),
+      removeElement: () => {
+        optionButton.removeEventListener("click", optionListeners.click);
+        SelectMap.delete(optionButton);
+        optionButton.remove();
+      },
+    };
+    // add to SelectMap for future reference
+    SelectMap.set(optionButton, optionListeners);
+    optionButton.addEventListener("click", optionListeners.click);
+
     optionLi.appendChild(optionButton);
     fragment.appendChild(optionLi);
   });

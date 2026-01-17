@@ -63,6 +63,10 @@ function recipesFiltered(search) {
   }
 }
 
+/**
+ * Set options for selects based on recipes data
+ * @param {recipes list} recipes
+ */
 function setSelectOptions(recipes) {
   const selectsOptions = {
     ingredients: new Set(),
@@ -79,9 +83,15 @@ function setSelectOptions(recipes) {
 
   Object.entries(selectsOptions).forEach(([k, v]) => {
     const optionsContainer = document.querySelector(`#select-${k} .options`);
+    const selectedOptionsContainer = document.querySelector(
+      `#select-${k} .selected-options`,
+    );
     optionsContainer.innerHTML = "";
     const options = [...v].map((o) => ({ label: o, value: o }));
-    const optionsFragment = createOptionElement(options);
+    const optionsFragment = createOptionElement(
+      selectedOptionsContainer,
+      options,
+    );
     optionsContainer.appendChild(optionsFragment);
   });
 }
