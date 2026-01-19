@@ -1,5 +1,14 @@
-import { chevron, crossSmall } from "../constants";
+import {
+  chevron,
+  crossSmall,
+  RECIPES,
+  selectedOptions,
+  setSelectedOptions,
+} from "../constants";
+import { Chip } from "./chip";
 import { SearchInput } from "./searchInput";
+
+const tagsContainer = document.getElementById("tags-container");
 
 const SelectMap = new Map();
 
@@ -188,8 +197,9 @@ function handleClickOption(selectedoptionsContainer, option) {
   selectedoptionsContainer.appendChild(newLi);
 
   // filter recipes
+  setSelectedOptions((prev) => [...prev, option.dataset.value]);
 
-  console.log("start to filter recipes");
+  createTags();
 }
 // set up for present selects in the DOM
 function SetUpPresentSelectsBehavior() {
@@ -228,9 +238,32 @@ function createOptionElement(selectedOptionsContainer, options) {
   return fragment;
 }
 
+function createTags() {
+  const fragment = document.createDocumentFragment();
+  selectedOptions.forEach((option) => {
+    const tag = Chip({
+      label: option,
+      color: "primary",
+      onDelete: () => {
+        const index = selectedOptions.indexOf(option);
+        if (index > -1) {
+          selectedOptions.splice(index, 1);
+          setSelectedOptions([...selectedOptions]);
+          createTags();
+        }
+      },
+      variant: "button",
+    });
+    fragment.appendChild(tag);
+  });
+  tagsContainer.innerHTML = "";
+  tagsContainer.appendChild(fragment);
+}
+
 export {
   Select,
   SetUpPresentSelectsBehavior,
   handleSelectInput,
   createOptionElement,
+  createTags,
 };

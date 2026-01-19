@@ -157,6 +157,14 @@
       }
     }
   }
+  &.text {
+    @apply p-0 bg-transparent min-w-0;
+
+    &::before,
+    &::after {
+      @apply hidden;
+    }
+  }
 
   &.icon-button {
     @apply text-dark stroke-dark w-[52px] h-[52px];
@@ -199,10 +207,13 @@
   }
 }
 .chip-base {
-  @apply rounded-[14px] px-[15px] py-[5px] text-sm font-body bg-dark bg-primary inline-block;
+  @apply rounded-[14px] px-[15px] py-[5px] text-sm font-body bg-dark bg-primary flex items-center justify-between gap-2;
 
   &.secondary {
     @apply bg-secondary text-light;
+  }
+  &.button {
+    @apply rounded-[10px] px-[15px] py-[17px] text-sm min-w-[203px];
   }
 }
 .icon {

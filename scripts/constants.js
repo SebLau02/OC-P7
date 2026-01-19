@@ -16,7 +16,18 @@ const setSuggestedRecipe = (recipe) => {
   suggestedRecipe = recipe;
 };
 
+let selectedOptions = [];
+const setSelectedOptions = (params) => {
+  if (typeof params === "function") {
+    selectedOptions = params(selectedOptions);
+  } else {
+    selectedOptions = params;
+  }
+};
+
 export {
+  selectedOptions,
+  setSelectedOptions,
   crossSmall,
   setRecipes,
   mediumCrossIcon,

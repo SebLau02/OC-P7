@@ -48,6 +48,13 @@ export default class Recipes extends Array {
     });
   }
 
+  byTags(tags) {
+    console.log(tags);
+    return this.filter((recipe) => {
+      return recipe;
+    });
+  }
+
   optionsList() {
     return {
       ingredients: this.ingredientsList(),
