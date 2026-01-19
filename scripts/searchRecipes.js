@@ -1,6 +1,7 @@
 import { RecipeCard } from "./components/recipeCard";
 import { createOptionElement } from "./components/select";
 import { RECIPES } from "./constants";
+import { debounce } from "./utils";
 
 const searchRecipeInput = document.getElementById("search-recipe");
 const recipesContainer = document.getElementById("result-container");
@@ -10,7 +11,10 @@ const emptyResult = document.getElementById("empty-result");
 let suggestedRecipe = {};
 
 function searchRecipes() {
-  searchRecipeInput.addEventListener("input", handleSearchRecipes);
+  searchRecipeInput.addEventListener(
+    "input",
+    debounce(handleSearchRecipes, 200),
+  );
 }
 
 function handleSearchRecipes(e) {
