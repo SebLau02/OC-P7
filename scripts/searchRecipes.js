@@ -72,18 +72,20 @@ function recipesFiltered(search) {
  * @param {recipes list} recipes
  */
 function setSelectOptions(recipes) {
-  const selectsOptions = {
-    ingredients: new Set(),
-    appliances: new Set(),
-    ustensils: new Set(),
-  };
-  recipes.forEach((recipe) => {
-    recipe.ingredients.forEach((ing) =>
-      selectsOptions.ingredients.add(ing.ingredient),
-    );
-    selectsOptions.appliances.add(recipe.appliance);
-    recipe.ustensils.forEach((ust) => selectsOptions.ustensils.add(ust));
-  });
+  // const selectsOptions = {
+  //   ingredients: new Set(),
+  //   appliances: new Set(),
+  //   ustensils: new Set(),
+  // };
+  // recipes.forEach((recipe) => {
+  //   recipe.ingredients.forEach((ing) =>
+  //     selectsOptions.ingredients.add(ing.ingredient),
+  //   );
+  //   selectsOptions.appliances.add(recipe.appliance);
+  //   recipe.ustensils.forEach((ust) => selectsOptions.ustensils.add(ust));
+  // });
+
+  const selectsOptions = recipes.optionsList();
 
   Object.entries(selectsOptions).forEach(([k, v]) => {
     const optionsContainer = document.querySelector(`#select-${k} .options`);

@@ -1,4 +1,8 @@
 export default class Recipes extends Array {
+  static get [Symbol.species]() {
+    return Recipes;
+  }
+
   constructor(items = []) {
     super(Array.isArray(items) ? items.length : 0);
     if (Array.isArray(items)) {

@@ -11,7 +11,7 @@ async function recipes() {
   const recipes = await getRecipes();
   setRecipes(recipes);
 
-  setSelectOptions(recipes);
+  setSelectOptions(RECIPES);
 
   const fragment = document.createDocumentFragment();
   recipes.forEach((recipe) => {
