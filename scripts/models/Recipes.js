@@ -30,6 +30,10 @@ export default class Recipes extends Array {
     );
   }
 
+  recipeIngredients(recipe) {
+    return recipe.ingredients.map((ing) => ing.ingredient.toLowerCase());
+  }
+
   bySearch(search) {
     return this.filter((recipe) => {
       const searchLower = search.toLowerCase();
@@ -49,9 +53,12 @@ export default class Recipes extends Array {
   }
 
   byTags(tags) {
-    console.log(tags);
     return this.filter((recipe) => {
-      return recipe;
+      const recipeIngredients = this.recipeIngredients(recipe);
+      const includesIngredients = tags.some((tag) =>
+        recipeIngredients.includes(tag),
+      );
+      return includesIngredients;
     });
   }
 

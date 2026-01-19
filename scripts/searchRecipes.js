@@ -75,4 +75,31 @@ function setSelectOptions(recipes) {
   });
 }
 
-export { searchRecipes, setSelectOptions };
+const updateRecipesContainer = () => {
+  const fragment = document.createDocumentFragment();
+  RECIPES.forEach((recipe) => {
+    const recipeCard = RecipeCard({ recipe });
+    fragment.appendChild(recipeCard);
+  });
+  // on vide le container avant d'ajouter les recettes filtrées
+  recipesContainer.innerHTML = "";
+  // on ajoute les recettes filtrées
+  recipesContainer.appendChild(fragment);
+  // on met à jour le nombre de recettes affichées
+  recipeCount.textContent = `${RECIPES.length} ${"recette".toPlural(
+    RECIPES.length,
+    "recette",
+    "recettes",
+  )}`;
+  if (RECIPES.length === 0) {
+    // on affiche le message de résultat vide avec une suggestion
+    const text = `Aucune recette ne contient ${"search"}, vous pouvez chercher ${suggestedRecipe.name}`; // à remplacer par une suggestion pertinente
+    emptyResult.textContent = text;
+    emptyResult.classList.remove("hidden");
+  } else if (emptyResult.classList.contains("hidden") === false) {
+    // on cache le message de résultat vide
+    emptyResult.classList.add("hidden");
+  }
+};
+
+export { searchRecipes, setSelectOptions, updateRecipesContainer };

@@ -3,8 +3,10 @@ import {
   crossSmall,
   RECIPES,
   selectedOptions,
+  setRecipes,
   setSelectedOptions,
 } from "../constants";
+import { updateRecipesContainer } from "../searchRecipes";
 import { Chip } from "./chip";
 import { SearchInput } from "./searchInput";
 
@@ -198,8 +200,9 @@ function handleClickOption(selectedoptionsContainer, option) {
 
   // filter recipes
   setSelectedOptions((prev) => [...prev, option.dataset.value]);
-
   createTags();
+  setRecipes(RECIPES.byTags(selectedOptions));
+  updateRecipesContainer();
 }
 // set up for present selects in the DOM
 function SetUpPresentSelectsBehavior() {
