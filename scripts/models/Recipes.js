@@ -1,3 +1,5 @@
+import { setSuggestedRecipe } from "../constants";
+
 export default class Recipes extends Array {
   static get [Symbol.species]() {
     return Recipes;
@@ -12,14 +14,38 @@ export default class Recipes extends Array {
 
   ingredientsList() {
     return new Set(
-      this.flatMap((recipe) => recipe.ingredients.map((ing) => ing.ingredient)),
+      this.flatMap((recipe) =>
+        recipe.ingredients.map((ing) => ing.ingredient.toLowerCase()),
+      ),
     );
   }
   appliancesList() {
-    return new Set(this.map((recipe) => recipe.appliance));
+    return new Set(this.map((recipe) => recipe.appliance.toLowerCase()));
   }
   ustensilsList() {
-    return new Set(this.flatMap((recipe) => recipe.ustensils));
+    return new Set(
+      this.flatMap((recipe) =>
+        recipe.ustensils.map((ust) => ust.toLowerCase()),
+      ),
+    );
+  }
+
+  bySearch(search) {
+    return this.filter((recipe) => {
+      const searchLower = search.toLowerCase();
+      const nameMatch = recipe.name.toLowerCase().includes(searchLower);
+      const descriptionMatch = recipe.description
+        .toLowerCase()
+        .includes(searchLower);
+      const ingredientsMatch = recipe.ingredients.some((ingredient) =>
+        ingredient.ingredient.toLowerCase().includes(searchLower),
+      );
+
+      if (nameMatch || descriptionMatch || ingredientsMatch) {
+        setSuggestedRecipe(recipe);
+      }
+      return nameMatch || descriptionMatch || ingredientsMatch;
+    });
   }
 
   optionsList() {

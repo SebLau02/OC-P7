@@ -1,7 +1,6 @@
 import { RecipeCard } from "./components/recipeCard";
 import { RECIPES, setRecipes } from "./constants";
 import { getRecipes } from "./fetchData";
-import Recipes from "./models/Recipes";
 import { setSelectOptions } from "./searchRecipes";
 
 const recipesContainer = document.getElementById("result-container");

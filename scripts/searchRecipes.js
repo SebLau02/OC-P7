@@ -1,6 +1,6 @@
 import { RecipeCard } from "./components/recipeCard";
 import { createOptionElement } from "./components/select";
-import { RECIPES } from "./constants";
+import { RECIPES, suggestedRecipe } from "./constants";
 import { debounce } from "./utils";
 
 const searchRecipeInput = document.getElementById("search-recipe");
@@ -8,7 +8,7 @@ const recipesContainer = document.getElementById("result-container");
 const recipeCount = document.getElementById("recipe-count");
 const emptyResult = document.getElementById("empty-result");
 
-let suggestedRecipe = {};
+// let suggestedRecipe = {};
 
 function searchRecipes() {
   searchRecipeInput.addEventListener(
@@ -25,26 +25,8 @@ function handleSearchRecipes(e) {
 }
 
 function recipesFiltered(search) {
-  const recipes = RECIPES;
-
-  const filteredRecipes = recipes.filter((recipe) => {
-    const searchLower = search.toLowerCase();
-    const nameMatch = recipe.name.toLowerCase().includes(searchLower);
-    const descriptionMatch = recipe.description
-      .toLowerCase()
-      .includes(searchLower);
-    const ingredientsMatch = recipe.ingredients.some((ingredient) =>
-      ingredient.ingredient.toLowerCase().includes(searchLower),
-    );
-
-    if (nameMatch || descriptionMatch || ingredientsMatch) {
-      suggestedRecipe = recipe;
-    }
-    return nameMatch || descriptionMatch || ingredientsMatch;
-  });
-
+  const filteredRecipes = RECIPES.bySearch(search);
   setSelectOptions(filteredRecipes);
-
   const fragment = document.createDocumentFragment();
   filteredRecipes.forEach((recipe) => {
     const recipeCard = RecipeCard({ recipe });
@@ -55,7 +37,11 @@ function recipesFiltered(search) {
   // on ajoute les recettes filtrées
   recipesContainer.appendChild(fragment);
   // on met à jour le nombre de recettes affichées
-  recipeCount.textContent = `${filteredRecipes.length} recettes`;
+  recipeCount.textContent = `${filteredRecipes.length} ${"recette".toPlural(
+    filteredRecipes.length,
+    "recette",
+    "recettes",
+  )}`;
   if (filteredRecipes.length === 0) {
     // on affiche le message de résultat vide avec une suggestion
     const text = `Aucune recette ne contient ${search}, vous pouvez chercher ${suggestedRecipe.name}`; // à remplacer par une suggestion pertinente
@@ -72,19 +58,6 @@ function recipesFiltered(search) {
  * @param {recipes list} recipes
  */
 function setSelectOptions(recipes) {
-  // const selectsOptions = {
-  //   ingredients: new Set(),
-  //   appliances: new Set(),
-  //   ustensils: new Set(),
-  // };
-  // recipes.forEach((recipe) => {
-  //   recipe.ingredients.forEach((ing) =>
-  //     selectsOptions.ingredients.add(ing.ingredient),
-  //   );
-  //   selectsOptions.appliances.add(recipe.appliance);
-  //   recipe.ustensils.forEach((ust) => selectsOptions.ustensils.add(ust));
-  // });
-
   const selectsOptions = recipes.optionsList();
 
   Object.entries(selectsOptions).forEach(([k, v]) => {

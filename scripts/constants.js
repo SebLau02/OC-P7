@@ -11,5 +11,18 @@ let RECIPES = new Recipes([]);
 function setRecipes(newValue) {
   RECIPES = new Recipes(newValue);
 }
+let suggestedRecipe = {};
+const setSuggestedRecipe = (recipe) => {
+  suggestedRecipe = recipe;
+};
 
-export { crossSmall, setRecipes, mediumCrossIcon, chevron, searchSm, RECIPES };
+export {
+  crossSmall,
+  setRecipes,
+  mediumCrossIcon,
+  chevron,
+  searchSm,
+  RECIPES,
+  suggestedRecipe,
+  setSuggestedRecipe,
+};
