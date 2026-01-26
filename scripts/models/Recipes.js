@@ -6,7 +6,7 @@ export default class Recipes extends Array {
   }
 
   constructor(items = []) {
-    super(Array.isArray(items) ? items.length : 0);
+    super();
     if (Array.isArray(items)) {
       this.push(...items);
     }
@@ -53,6 +53,9 @@ export default class Recipes extends Array {
   }
 
   byTags(tags) {
+    if (tags.length === 0) {
+      return this;
+    }
     return this.filter((recipe) => {
       const recipeIngredients = this.recipeIngredients(recipe);
       const includesIngredients = tags.some((tag) =>
@@ -62,6 +65,10 @@ export default class Recipes extends Array {
     });
   }
 
+  /**
+   * Get options list for selects
+   * @returns {object}
+   */
   optionsList() {
     return {
       ingredients: this.ingredientsList(),

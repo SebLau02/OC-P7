@@ -209,6 +209,10 @@
 .chip-base {
   @apply rounded-[14px] px-[15px] py-[5px] text-sm font-body bg-dark bg-primary flex items-center justify-between gap-2;
 
+  span {
+    @apply capitalize;
+  }
+
   &.secondary {
     @apply bg-secondary text-light;
   }

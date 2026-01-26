@@ -6,7 +6,7 @@ import {
   setRecipes,
   setSelectedOptions,
 } from "../constants";
-import { updateRecipesContainer } from "../searchRecipes";
+import { setSelectOptions, updateRecipesContainer } from "../searchRecipes";
 import { Chip } from "./chip";
 import { SearchInput } from "./searchInput";
 
@@ -14,6 +14,11 @@ const tagsContainer = document.getElementById("tags-container");
 
 const SelectMap = new Map();
 
+/**
+ * Create a Select component
+ * @param {object} param0
+ * @returns
+ */
 function Select({ label = "Label", options = [] }) {
   // Create select container
   const selectContainer = document.createElement("div");
@@ -56,12 +61,11 @@ function Select({ label = "Label", options = [] }) {
   optionsContainer.setAttribute("class", "options");
 
   // create options
-  const optionsFregment = createOptionElement(
+  const optionsFragment = createOptionElement(
     selectedoptionsContainer,
     options,
   );
-  optionsContainer.appendChild(optionsFregment);
-
+  optionsContainer.appendChild(optionsFragment);
   SelectBody.appendChild(optionsContainer);
 
   selectContainer.appendChild(labelButton);
@@ -158,12 +162,20 @@ function handleSelectInput(select) {
   );
 }
 
+/**
+ * Handle click on option
+ * Create selected option in selected options container
+ * @param {Array} selectedoptionsContainer
+ * @param {HTMLElement} option
+ * @returns
+ */
 function handleClickOption(selectedoptionsContainer, option) {
   const selectedOptionsValues = Array.from(
     selectedoptionsContainer.children,
   ).map((c) => c.children[0].getAttribute("data-selected-option"));
 
   if (selectedOptionsValues.includes(option.dataset.value)) {
+    // return if option is already selected
     return;
   }
 
@@ -182,11 +194,12 @@ function handleClickOption(selectedoptionsContainer, option) {
   const deleteBtnListeners = {
     click: () => {
       selectedoptionsContainer.removeChild(newLi);
+      onDeleteOption(option.dataset.value);
     },
     removeElement: () => {
       deleteBtn.removeEventListener("click", deleteBtnListeners.click);
       SelectMap.delete(deleteBtn);
-      deleteBtn.remove();
+      newLi.remove();
     },
   };
   // add to SelectMap for future reference
@@ -199,10 +212,11 @@ function handleClickOption(selectedoptionsContainer, option) {
   selectedoptionsContainer.appendChild(newLi);
 
   // filter recipes
-  setSelectedOptions((prev) => [...prev, option.dataset.value]);
+  setSelectedOptions((prev) => [...prev, option.dataset.value]); // add the current option to selected options list
   createTags();
-  setRecipes(RECIPES.byTags(selectedOptions));
-  updateRecipesContainer();
+  const filteredRecipes = RECIPES.byTags(selectedOptions);
+  setSelectOptions(filteredRecipes);
+  updateRecipesContainer(filteredRecipes);
 }
 // set up for present selects in the DOM
 function SetUpPresentSelectsBehavior() {
@@ -213,6 +227,12 @@ function SetUpPresentSelectsBehavior() {
   });
 }
 
+/**
+ * Create option elements
+ * @param {HTMLElement} selectedOptionsContainer
+ * @param {Array} options
+ * @returns {DocumentFragment}
+ */
 function createOptionElement(selectedOptionsContainer, options) {
   const fragment = document.createDocumentFragment();
 
@@ -241,6 +261,9 @@ function createOptionElement(selectedOptionsContainer, options) {
   return fragment;
 }
 
+/**
+ * Create tags for selected options
+ */
 function createTags() {
   const fragment = document.createDocumentFragment();
   selectedOptions.forEach((option) => {
@@ -248,12 +271,7 @@ function createTags() {
       label: option,
       color: "primary",
       onDelete: () => {
-        const index = selectedOptions.indexOf(option);
-        if (index > -1) {
-          selectedOptions.splice(index, 1);
-          setSelectedOptions([...selectedOptions]);
-          createTags();
-        }
+        onDeleteOption(option);
       },
       variant: "button",
     });
@@ -262,6 +280,28 @@ function createTags() {
   tagsContainer.innerHTML = "";
   tagsContainer.appendChild(fragment);
 }
+
+/**
+ * Handle deletion of selected option
+ * @param {string} option
+ */
+const onDeleteOption = (option) => {
+  const index = selectedOptions.indexOf(option);
+  if (index > -1) {
+    selectedOptions.splice(index, 1); // remove option from selectedOptions
+    setSelectedOptions([...selectedOptions]); // update selectedOptions
+    const filteredRecipes = RECIPES.byTags(selectedOptions); // get filtered recipes
+    updateRecipesContainer(filteredRecipes); // update recipes container
+    setSelectOptions(filteredRecipes); // update select options
+    createTags();
+    // clear the selected option in the select component
+    const selectSelectedOption = document.querySelector(
+      `.selected-option[data-selected-option="${option}"] .button-base`,
+    );
+    if (selectSelectedOption)
+      SelectMap.get(selectSelectedOption).removeElement();
+  }
+};
 
 export {
   Select,

@@ -8,8 +8,9 @@ const recipesContainer = document.getElementById("result-container");
 const recipeCount = document.getElementById("recipe-count");
 const emptyResult = document.getElementById("empty-result");
 
-// let suggestedRecipe = {};
-
+/**
+ * Initialize search recipes functionality
+ */
 function searchRecipes() {
   searchRecipeInput.addEventListener(
     "input",
@@ -17,6 +18,11 @@ function searchRecipes() {
   );
 }
 
+/**
+ * Handle search recipes input
+ * @param {Event} e
+ * @returns
+ */
 function handleSearchRecipes(e) {
   const { value } = e.target;
   if (value.length === 0) recipesFiltered(value);
@@ -24,9 +30,13 @@ function handleSearchRecipes(e) {
   recipesFiltered(value);
 }
 
+/**
+ * Filter recipes based on search input
+ * @param {string} search
+ */
 function recipesFiltered(search) {
-  const filteredRecipes = RECIPES.bySearch(search);
-  setSelectOptions(filteredRecipes);
+  const filteredRecipes = RECIPES.bySearch(search); // filtered recipes
+  setSelectOptions(filteredRecipes); // update select options based on filtered recipes
   const fragment = document.createDocumentFragment();
   filteredRecipes.forEach((recipe) => {
     const recipeCard = RecipeCard({ recipe });
@@ -55,29 +65,32 @@ function recipesFiltered(search) {
 
 /**
  * Set options for selects based on recipes data
- * @param {recipes list} recipes
+ * @param {Array} recipes
  */
 function setSelectOptions(recipes) {
   const selectsOptions = recipes.optionsList();
 
   Object.entries(selectsOptions).forEach(([k, v]) => {
-    const optionsContainer = document.querySelector(`#select-${k} .options`);
+    const optionsContainer = document.querySelector(`#select-${k} .options`); // select options container
     const selectedOptionsContainer = document.querySelector(
       `#select-${k} .selected-options`,
-    );
-    optionsContainer.innerHTML = "";
-    const options = [...v].map((o) => ({ label: o, value: o }));
+    ); // selected options container
+    optionsContainer.innerHTML = ""; // clear existing options
+    const options = [...v].map((o) => ({ label: o, value: o })); // format options
     const optionsFragment = createOptionElement(
       selectedOptionsContainer,
       options,
-    );
-    optionsContainer.appendChild(optionsFragment);
+    ); // create option elements
+    optionsContainer.appendChild(optionsFragment); // append new options
   });
 }
 
-const updateRecipesContainer = () => {
+/**
+ * Update recipes container with current RECIPES
+ */
+const updateRecipesContainer = (recipes) => {
   const fragment = document.createDocumentFragment();
-  RECIPES.forEach((recipe) => {
+  recipes.forEach((recipe) => {
     const recipeCard = RecipeCard({ recipe });
     fragment.appendChild(recipeCard);
   });
@@ -86,12 +99,12 @@ const updateRecipesContainer = () => {
   // on ajoute les recettes filtrées
   recipesContainer.appendChild(fragment);
   // on met à jour le nombre de recettes affichées
-  recipeCount.textContent = `${RECIPES.length} ${"recette".toPlural(
-    RECIPES.length,
+  recipeCount.textContent = `${recipes.length} ${"recette".toPlural(
+    recipes.length,
     "recette",
     "recettes",
   )}`;
-  if (RECIPES.length === 0) {
+  if (recipes.length === 0) {
     // on affiche le message de résultat vide avec une suggestion
     const text = `Aucune recette ne contient ${"search"}, vous pouvez chercher ${suggestedRecipe.name}`; // à remplacer par une suggestion pertinente
     emptyResult.textContent = text;
