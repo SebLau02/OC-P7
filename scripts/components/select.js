@@ -249,7 +249,7 @@ function createOptionElement(selectedOptionsContainer, options) {
       removeElement: () => {
         optionButton.removeEventListener("click", optionListeners.click);
         SelectMap.delete(optionButton);
-        optionButton.remove();
+        optionLi.remove();
       },
     };
     // add to SelectMap for future reference
@@ -310,4 +310,5 @@ export {
   handleSelectInput,
   createOptionElement,
   createTags,
+  SelectMap,
 };

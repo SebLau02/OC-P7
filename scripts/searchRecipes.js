@@ -1,5 +1,5 @@
 import { RecipeCard } from "./components/recipeCard";
-import { createOptionElement } from "./components/select";
+import { createOptionElement, SelectMap } from "./components/select";
 import {
   RECIPES,
   selectedOptions,
@@ -91,7 +91,14 @@ function setSelectOptions(recipes) {
     const selectedOptionsContainer = document.querySelector(
       `#select-${k} .selected-options`,
     ); // selected options container
-    optionsContainer.innerHTML = ""; // clear existing options
+    const currentOptions = optionsContainer.querySelectorAll("li");
+    Array.from(currentOptions).forEach((option) => {
+      const button = option.querySelector("button");
+      const listeners = SelectMap.get(button);
+      if (listeners) {
+        listeners.removeElement();
+      }
+    }); // clear current options
     const options = [...v].map((o) => ({ label: o, value: o })); // format options
     const optionsFragment = createOptionElement(
       selectedOptionsContainer,
