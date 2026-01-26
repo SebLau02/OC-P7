@@ -1,20 +1,13 @@
-import { RecipeCard } from "./components/recipeCard";
+import { setRecipes } from "./constants";
 import { getRecipes } from "./fetchData";
+import { renderCardContainer } from "./utils/utils";
 
-const recipesContainer = document.getElementById("result-container");
-const recipeCount = document.getElementById("recipe-count");
 const emptyResult = document.getElementById("empty-result");
 
 async function recipes() {
   const recipes = await getRecipes();
-
-  const fragment = document.createDocumentFragment();
-  recipes.forEach((recipe) => {
-    const recipeCard = RecipeCard({ recipe });
-    fragment.appendChild(recipeCard);
-  });
-  recipesContainer.appendChild(fragment);
-  recipeCount.textContent = `${recipes.length} recettes`;
+  setRecipes(recipes);
+  renderCardContainer(recipes);
   if (recipes.length === 0) {
     const text = emptyResult.textContent
       .replace("{{search}}", "tarte au pomme") // à remplacer par le champ de recherche
