@@ -327,6 +327,7 @@
 
 .recipe-card {
   @apply w-[380px] bg-light rounded-[21px] overflow-hidden h-[731px];
+  box-shadow: 0px 4px 34px 30px rgba(0, 0, 0, 0.04);
 
   .recipe-image-container {
     @apply h-[253px] w-full relative;

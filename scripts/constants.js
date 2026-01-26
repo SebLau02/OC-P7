@@ -15,6 +15,10 @@ let suggestedRecipe = {};
 const setSuggestedRecipe = (recipe) => {
   suggestedRecipe = recipe;
 };
+let search = "";
+const setSearch = (newSearch) => {
+  search = newSearch;
+};
 
 let selectedOptions = [];
 const setSelectedOptions = (params) => {
@@ -36,4 +40,6 @@ export {
   RECIPES,
   suggestedRecipe,
   setSuggestedRecipe,
+  search,
+  setSearch,
 };

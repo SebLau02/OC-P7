@@ -2,6 +2,7 @@ import {
   chevron,
   crossSmall,
   RECIPES,
+  search,
   selectedOptions,
   setRecipes,
   setSelectedOptions,
@@ -214,7 +215,7 @@ function handleClickOption(selectedoptionsContainer, option) {
   // filter recipes
   setSelectedOptions((prev) => [...prev, option.dataset.value]); // add the current option to selected options list
   createTags();
-  const filteredRecipes = RECIPES.byTags(selectedOptions);
+  const filteredRecipes = RECIPES.bySearch(search).byTags(selectedOptions);
   setSelectOptions(filteredRecipes);
   updateRecipesContainer(filteredRecipes);
 }
@@ -290,7 +291,7 @@ const onDeleteOption = (option) => {
   if (index > -1) {
     selectedOptions.splice(index, 1); // remove option from selectedOptions
     setSelectedOptions([...selectedOptions]); // update selectedOptions
-    const filteredRecipes = RECIPES.byTags(selectedOptions); // get filtered recipes
+    const filteredRecipes = RECIPES.bySearch(search).byTags(selectedOptions); // get filtered recipes
     updateRecipesContainer(filteredRecipes); // update recipes container
     setSelectOptions(filteredRecipes); // update select options
     createTags();

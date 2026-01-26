@@ -771,6 +771,7 @@
   overflow: hidden;
   border-radius: 21px;
   background-color: var(--color-light);
+  box-shadow: 0px 4px 34px 30px rgba(0, 0, 0, 0.04);
   .recipe-image-container {
     position: relative;
     height: 253px;

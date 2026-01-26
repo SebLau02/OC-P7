@@ -1,6 +1,6 @@
 import { RecipeCard } from "./components/recipeCard";
 import { createOptionElement } from "./components/select";
-import { RECIPES, suggestedRecipe } from "./constants";
+import { RECIPES, setSearch, suggestedRecipe } from "./constants";
 import { debounce } from "./utils";
 
 const searchRecipeInput = document.getElementById("search-recipe");
@@ -45,6 +45,7 @@ function handleSearchRecipes(e) {
  * @param {string} search
  */
 function recipesFiltered(search) {
+  setSearch(search);
   const filteredRecipes = RECIPES.bySearch(search); // filtered recipes
   setSelectOptions(filteredRecipes); // update select options based on filtered recipes
   const fragment = document.createDocumentFragment();
