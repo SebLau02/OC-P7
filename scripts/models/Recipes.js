@@ -67,9 +67,7 @@ export default class Recipes extends Array {
       const recipeUstensils = this.recipeUstensils(recipe);
       const recipeAppliance = this.recipeAppliance(recipe);
 
-      const includesIngredients = tags.some((tag) =>
-        recipeIngredients.includes(tag),
-      );
+      const includesIngredients = this.isIncludesTag(tags, recipeIngredients);
       const includesUstensils = this.isIncludesTag(tags, recipeUstensils);
       const includesAppliance = this.isIncludesTag(tags, [recipeAppliance]);
 
