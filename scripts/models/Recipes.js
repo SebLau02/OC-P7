@@ -33,6 +33,12 @@ export default class Recipes extends Array {
   recipeIngredients(recipe) {
     return recipe.ingredients.map((ing) => ing.ingredient.toLowerCase());
   }
+  recipeAppliance(recipe) {
+    return recipe.appliance.toLowerCase();
+  }
+  recipeUstensils(recipe) {
+    return recipe.ustensils.map((ust) => ust.toLowerCase());
+  }
 
   bySearch(search) {
     return this.filter((recipe) => {
@@ -58,12 +64,20 @@ export default class Recipes extends Array {
     }
     return this.filter((recipe) => {
       const recipeIngredients = this.recipeIngredients(recipe);
+      const recipeUstensils = this.recipeUstensils(recipe);
+      const recipeAppliance = this.recipeAppliance(recipe);
+
       const includesIngredients = tags.some((tag) =>
         recipeIngredients.includes(tag),
       );
-      return includesIngredients;
+      const includesUstensils = this.isIncludesTag(tags, recipeUstensils);
+      const includesAppliance = this.isIncludesTag(tags, [recipeAppliance]);
+
+      return includesIngredients || includesUstensils || includesAppliance;
     });
   }
+
+  isIncludesTag = (options, list) => options.some((tag) => list.includes(tag));
 
   /**
    * Get options list for selects
