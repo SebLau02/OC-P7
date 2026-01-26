@@ -16,7 +16,17 @@ function searchRecipes() {
     "input",
     debounce(handleSearchRecipes, 200),
   );
+
+  handleClearSearchRecipe();
 }
+
+const handleClearSearchRecipe = () => {
+  searchRecipeInput
+    .querySelector("input")
+    .addEventListener("inputCleared", () => {
+      recipesFiltered("");
+    });
+};
 
 /**
  * Handle search recipes input
