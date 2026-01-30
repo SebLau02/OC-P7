@@ -45,15 +45,8 @@ function Select({ label = "Label", options = [] }) {
   optionsContainer.setAttribute("class", "options");
 
   // create options
-  options.forEach((option) => {
-    const optionLi = document.createElement("li");
-    const optionButton = document.createElement("button");
-    optionButton.setAttribute("class", "option text-body2");
-    optionButton.setAttribute("data-value", option.value);
-    optionButton.textContent = option.label;
-    optionLi.appendChild(optionButton);
-    optionsContainer.appendChild(optionLi);
-  });
+  const optionsFragment = createSelectOptions(options);
+  optionsContainer.appendChild(optionsFragment);
   SelectBody.appendChild(optionsContainer);
 
   selectContainer.appendChild(labelButton);
@@ -65,13 +58,35 @@ function Select({ label = "Label", options = [] }) {
 }
 
 /**
+ * Create select options elements
+ * @param {Array} options
+ * @returns {DocumentFragment}
+ */
+const createSelectOptions = (options) => {
+  const fragment = document.createDocumentFragment();
+  options.forEach((option) => {
+    const opt =
+      typeof option === "string" ? { label: option, value: option } : option;
+    const optionLi = document.createElement("li");
+    const optionButton = document.createElement("button");
+    optionButton.setAttribute("class", "option text-body2");
+    optionButton.setAttribute("data-value", opt.value);
+    optionButton.textContent = opt.label;
+    setUpOptionListeners(optionButton);
+
+    optionLi.appendChild(optionButton);
+    fragment.appendChild(optionLi);
+  });
+  return fragment;
+};
+
+/**
  * Setup for select input behavior
- * @param {dom element} select
+ * @param {HTMLElement} select
  */
 function handleSelectInput(select) {
   const button = select.querySelector(".selected");
   const options = select.querySelectorAll(".option");
-  const selectedoptionsContainer = select.querySelector(".selected-options");
   const searchOptionInput = select.querySelector(
     ".select-body .search-input-base input",
   );
@@ -94,17 +109,8 @@ function handleSelectInput(select) {
 
   Array.from(options).forEach((option) => {
     // add event listener to each option
-    const optionListeners = {
-      click: () => handleClickOption(selectedoptionsContainer, option),
-      removeElement: () => {
-        option.removeEventListener("click", optionListeners.click);
-        SelectMap.delete(option);
-        option.remove();
-      },
-    };
-    // add to SelectMap for future reference
-    SelectMap.set(option, optionListeners);
-    option.addEventListener("click", optionListeners.click);
+
+    setUpOptionListeners(option);
   });
 
   // add event listener to search input
@@ -150,10 +156,27 @@ function handleSelectInput(select) {
   );
 }
 
-function handleClickOption(selectedoptionsContainer, option) {
-  const selectedOptionsValues = Array.from(
-    selectedoptionsContainer.children,
-  ).map((c) => c.children[0].getAttribute("data-selected-option"));
+const setUpOptionListeners = (option) => {
+  const optionListeners = {
+    click: () => handleClickOption(option),
+    removeElement: () => {
+      option.removeEventListener("click", optionListeners.click);
+      SelectMap.delete(option);
+      option.remove();
+    },
+  };
+  // add to SelectMap for future reference
+  SelectMap.set(option, optionListeners);
+  option.addEventListener("click", optionListeners.click);
+};
+
+function handleClickOption(option) {
+  const selectedContainer =
+    option.parentElement.parentElement.previousElementSibling;
+
+  const selectedOptionsValues = Array.from(selectedContainer.children).map(
+    (c) => c.children[0].getAttribute("data-selected-option"),
+  );
 
   if (selectedOptionsValues.includes(option.dataset.value)) {
     return;
@@ -171,7 +194,7 @@ function handleClickOption(selectedoptionsContainer, option) {
   // add event listener to delete button
   const deleteBtnListeners = {
     click: () => {
-      selectedoptionsContainer.removeChild(newLi);
+      selectedContainer.removeChild(newLi);
     },
     removeElement: () => {
       deleteBtn.removeEventListener("click", deleteBtnListeners.click);
@@ -186,7 +209,7 @@ function handleClickOption(selectedoptionsContainer, option) {
   newSelection.appendChild(deleteBtn);
 
   newLi.appendChild(newSelection);
-  selectedoptionsContainer.appendChild(newLi);
+  selectedContainer.appendChild(newLi);
 }
 // set up for present selects in the DOM
 const selects = document.querySelectorAll(".select-base");
@@ -196,4 +219,9 @@ function SetUpPresentSelectsBehavior() {
   });
 }
 
-export { Select, SetUpPresentSelectsBehavior, handleSelectInput };
+export {
+  Select,
+  SetUpPresentSelectsBehavior,
+  handleSelectInput,
+  createSelectOptions,
+};

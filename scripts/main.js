@@ -8,6 +8,5 @@ document.addEventListener("DOMContentLoaded", () => {
   IndexRecipes();
   SetUpPresentSelectsBehavior();
   handleFocusInput();
-
   handleSearch();
 });
