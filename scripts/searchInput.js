@@ -1,4 +1,4 @@
-import { setSuggestions } from "./constants";
+import { recipes, setSuggestions } from "./constants";
 import { filterBySearch, renderCardContainer } from "./utils/utils";
 
 const searchInput = document.querySelector("#search-input");
@@ -10,6 +10,9 @@ const handleSearch = () => {
     const filteredRecipes = filterBySearch(value);
     renderCardContainer(filteredRecipes);
     setSuggestions((prev) => ({ ...prev, search: value }));
+  });
+  inputField.addEventListener("inputCleared", () => {
+    renderCardContainer(recipes);
   });
 };
 

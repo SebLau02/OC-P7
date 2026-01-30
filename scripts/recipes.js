@@ -4,7 +4,7 @@ import { renderCardContainer } from "./utils/utils";
 
 const emptyResult = document.getElementById("empty-result");
 
-async function recipes() {
+async function IndexRecipes() {
   const recipes = await getRecipes();
   setRecipes(recipes);
   renderCardContainer(recipes);
@@ -19,4 +19,4 @@ async function recipes() {
   }
 }
 
-export { recipes };
+export { IndexRecipes };
