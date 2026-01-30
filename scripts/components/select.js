@@ -161,13 +161,22 @@ const setUpOptionListeners = (option) => {
     click: () => handleClickOption(option),
     removeElement: () => {
       option.removeEventListener("click", optionListeners.click);
+      option.parentElement.remove();
       SelectMap.delete(option);
-      option.remove();
     },
   };
   // add to SelectMap for future reference
   SelectMap.set(option, optionListeners);
   option.addEventListener("click", optionListeners.click);
+};
+
+const cleanOptions = (optionsContainer) => {
+  Array.from(optionsContainer.children).forEach((option) => {
+    const listeners = SelectMap.get(option.children[0]);
+    if (listeners && listeners.removeElement) {
+      listeners.removeElement();
+    }
+  });
 };
 
 function handleClickOption(option) {
@@ -224,4 +233,5 @@ export {
   SetUpPresentSelectsBehavior,
   handleSelectInput,
   createSelectOptions,
+  cleanOptions,
 };

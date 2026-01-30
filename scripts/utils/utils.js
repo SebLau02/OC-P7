@@ -1,5 +1,5 @@
 import { RecipeCard } from "../components/recipeCard";
-import { createSelectOptions } from "../components/select";
+import { cleanOptions, createSelectOptions } from "../components/select";
 import { recipes, setSuggestions, suggestions } from "../constants";
 
 const recipeCount = document.getElementById("recipe-count");
@@ -165,12 +165,15 @@ const renderSelectOptions = (recipes) => {
   );
 
   const ingOptionsFragment = createSelectOptions(ingredients);
+  cleanOptions(ingredientSelect);
   ingredientSelect.appendChild(ingOptionsFragment);
 
   const ustOptionsFragment = createSelectOptions(utensilsSet);
+  cleanOptions(ustensilsSelect);
   ustensilsSelect.appendChild(ustOptionsFragment);
 
   const optionsFragment = createSelectOptions(appliancesSet);
+  cleanOptions(appliancesSelect);
   appliancesSelect.appendChild(optionsFragment);
 };
 
