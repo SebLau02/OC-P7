@@ -9,4 +9,23 @@ const setRecipes = (newValue) => {
   recipes = newValue;
 };
 
-export { crossSmall, mediumCrossIcon, chevron, searchSm, recipes, setRecipes };
+let suggestions = {
+  search: "",
+  suggest: "",
+};
+const setSuggestions = (newValue) => {
+  if (typeof newValue === "function") {
+    suggestions = newValue(suggestions);
+  } else suggestions = newValue;
+};
+
+export {
+  crossSmall,
+  mediumCrossIcon,
+  chevron,
+  searchSm,
+  recipes,
+  setRecipes,
+  setSuggestions,
+  suggestions,
+};

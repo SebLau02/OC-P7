@@ -1,8 +1,9 @@
 import { RecipeCard } from "../components/recipeCard";
-import { recipes } from "../constants";
+import { recipes, setSuggestions, suggestions } from "../constants";
 
 const recipeCount = document.getElementById("recipe-count");
 const recipesContainer = document.getElementById("result-container");
+const emptyResult = document.getElementById("empty-result");
 
 // Filter recipes by search value
 const filterBySearch = (searchValue) => {
@@ -20,8 +21,10 @@ const filterBySearch = (searchValue) => {
       recipeIngredientsList.some((ingredient) =>
         ingredient.includes(lowerCaseSearchValue),
       )
-    )
+    ) {
       filteredRecipes.push(recipe);
+      setSuggestions((prev) => ({ ...prev, suggest: recipe.name }));
+    }
   }
   return filteredRecipes;
 };
@@ -48,6 +51,15 @@ const renderCardContainer = (recipes) => {
   recipesContainer.innerHTML = "";
   recipesContainer.appendChild(recipesFragment);
   recipeCount.textContent = `${recipes.length} recettes`;
+  const emptyText = emptyResult.textContent
+    .replace("{{search}}", `"${suggestions.search}"`) // à remplacer par le champ de recherche
+    .replace("{{suggest}}", `"${suggestions.suggest}"`);
+  if (recipes.length === 0) {
+    emptyResult.classList.remove("hidden");
+    emptyResult.textContent = emptyText;
+  } else if (emptyResult.classList.contains("hidden") === false) {
+    emptyResult.classList.add("hidden");
+  }
 };
 
 export {
