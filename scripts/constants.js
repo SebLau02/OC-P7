@@ -19,6 +19,15 @@ const setSuggestions = (newValue) => {
   } else suggestions = newValue;
 };
 
+let filters = [];
+const setFilters = (newFilters) => {
+  if (typeof newFilters === "function") {
+    filters = newFilters(filters);
+  } else {
+    filters = newFilters;
+  }
+};
+
 export {
   crossSmall,
   mediumCrossIcon,
@@ -28,4 +37,6 @@ export {
   setRecipes,
   setSuggestions,
   suggestions,
+  filters,
+  setFilters,
 };

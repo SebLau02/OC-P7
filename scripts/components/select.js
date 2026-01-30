@@ -1,4 +1,4 @@
-import { chevron, crossSmall } from "../constants";
+import { chevron, crossSmall, setFilters } from "../constants";
 import { SearchInput } from "./searchInput";
 
 const SelectMap = new Map();
@@ -109,7 +109,6 @@ function handleSelectInput(select) {
 
   Array.from(options).forEach((option) => {
     // add event listener to each option
-
     setUpOptionListeners(option);
   });
 
@@ -199,7 +198,6 @@ function handleClickOption(option) {
   newSelection.setAttribute("class", "selected-option text-body2");
   newSelection.setAttribute("data-selected-option", option.dataset.value);
   newSelection.textContent = option.textContent;
-
   const deleteBtn = document.createElement("button");
   deleteBtn.setAttribute("class", "button-base icon-button sm secondary pill");
   deleteBtn.innerHTML = crossSmall;
@@ -238,4 +236,5 @@ export {
   handleSelectInput,
   createSelectOptions,
   cleanOptions,
+  SelectMap,
 };

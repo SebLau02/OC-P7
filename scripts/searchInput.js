@@ -1,4 +1,4 @@
-import { recipes, setSuggestions } from "./constants";
+import { filters, recipes, setSuggestions } from "./constants";
 import { filterBySearch, renderCardContainer } from "./utils/utils";
 import { debounce } from "./utils/utils";
 
