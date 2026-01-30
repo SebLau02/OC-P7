@@ -1,3 +1,4 @@
+import "./prototypes.js";
 import { SetUpPresentSelectsBehavior } from "./components/select.js";
 import { handleFocusInput } from "./components/searchInput.js";
 import { IndexRecipes } from "./recipes.js";

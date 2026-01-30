@@ -23,9 +23,41 @@ const filterBySearch = (searchValue) => {
       )
     ) {
       filteredRecipes.push(recipe);
-      setSuggestions((prev) => ({ ...prev, suggest: recipe.name }));
     }
   }
+
+  // Suggestion si aucun résultat : trouver la recette la plus proche par similarité de nom
+  if (filteredRecipes.length === 0 && searchValue.length > 0) {
+    let bestMatch = null;
+    let bestScore = 0;
+    for (let i = 0; i < recipes.length; i++) {
+      const recipe = recipes[i];
+      // Score = nombre de caractères consécutifs communs au début du nom (prefix match)
+      let score = 0;
+      const name = recipe.name.toLowerCase();
+      for (
+        let j = 0;
+        j < Math.min(name.length, lowerCaseSearchValue.length);
+        j++
+      ) {
+        if (name[j] === lowerCaseSearchValue[j]) {
+          score++;
+        } else {
+          break;
+        }
+      }
+      if (score > bestScore) {
+        bestScore = score;
+        bestMatch = recipe;
+      }
+    }
+    if (bestMatch) {
+      setSuggestions((prev) => ({ ...prev, suggest: bestMatch.name }));
+    } else {
+      setSuggestions((prev) => ({ ...prev, suggest: "" }));
+    }
+  }
+
   return filteredRecipes;
 };
 
@@ -51,18 +83,27 @@ const renderCardContainer = (recipes) => {
   recipesContainer.innerHTML = "";
   recipesContainer.appendChild(recipesFragment);
   recipeCount.textContent = `${recipes.length} recettes`;
-  const emptyText = emptyResult.textContent
-    .replace("{{search}}", `"${suggestions.search}"`) // à remplacer par le champ de recherche
-    .replace("{{suggest}}", `"${suggestions.suggest}"`);
+  const emptyText = `Aucune recette ne contient "${suggestions.search}", vous pouvez chercher "${suggestions.suggest}"`;
   if (recipes.length === 0) {
     emptyResult.classList.remove("hidden");
     emptyResult.textContent = emptyText;
   } else if (emptyResult.classList.contains("hidden") === false) {
     emptyResult.classList.add("hidden");
+    emptyResult.textContent =
+      "Aucune recette ne contient {{search}}, vous pouvez chercher {{suggest}}";
   }
 };
 
+function debounce(fn, delay) {
+  let timer;
+  return function (...args) {
+    clearTimeout(timer);
+    timer = setTimeout(() => fn.apply(this, args), delay);
+  };
+}
+
 export {
+  debounce,
   filterBySearch,
   recipeIngredients,
   createRecipesCard,
