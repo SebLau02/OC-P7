@@ -1,4 +1,11 @@
-import { dataRecipes, filters, search, setRecipes } from "./constants";
+import { Chip } from "./components/chip";
+import {
+  dataRecipes,
+  filters,
+  search,
+  setFilters,
+  setRecipes,
+} from "./constants";
 import {
   filterBySearch,
   recipeIngredients,
@@ -32,6 +39,28 @@ const handleFilter = () => {
 
   setRecipes(filteredRecipes);
   renderCardContainer(filteredRecipes);
+  renderOptionsChip();
+};
+
+const renderOptionsChip = () => {
+  const fragment = document.createDocumentFragment();
+  const chipsContainer = document.getElementById("options-chip-container");
+  for (const filter of Array.from(filters)) {
+    const chip = Chip({
+      label: filter,
+      onDelete: (e) => {
+        setFilters((prev) => {
+          const newSet = new Set(prev);
+          newSet.delete(filter);
+          return newSet;
+        });
+        handleFilter();
+      },
+    });
+    fragment.appendChild(chip);
+  }
+  chipsContainer.innerHTML = "";
+  chipsContainer.appendChild(fragment);
 };
 
 export { handleFilter };

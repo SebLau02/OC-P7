@@ -1,4 +1,4 @@
-function Chip({ label = "", color = "primary" }) {
+function Chip({ label = "", color = "primary", onDelete }) {
   const chipContainer = document.createElement("div");
   chipContainer.setAttribute("class", `chip-base ${color}`);
 
