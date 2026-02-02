@@ -116,6 +116,7 @@ function handleSelectInput(select) {
   const searchOptionInputListeners = {
     input: (e) => {
       const searchValue = e.target.value.toLowerCase();
+      const options = select.querySelectorAll(".option");
 
       Array.from(options).forEach((option) => {
         if (searchValue === "") {
@@ -128,7 +129,7 @@ function handleSelectInput(select) {
       });
     },
     inputCleared: (e) => {
-      Array.from(options).forEach((option) => {
+      Array.from(select.querySelectorAll(".option")).forEach((option) => {
         option.classList.remove("hidden");
       });
     },
