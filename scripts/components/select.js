@@ -188,7 +188,7 @@ function handleClickOption({ option, onDelete }) {
 
   // check if option is already selected
   const selectedOptionsValues = Array.from(selectedContainer.children).map(
-    (c) => c.children[0].getAttribute("data-selected-option"),
+    (c) => c.children[0]?.getAttribute("data-selected-option"),
   );
 
   if (selectedOptionsValues.includes(option.dataset.value)) {

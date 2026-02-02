@@ -55,12 +55,21 @@ const renderOptionsChip = () => {
           return newSet;
         });
         handleFilter();
+        handleClearSelectedOptions(filter);
       },
+      variant: "button",
     });
     fragment.appendChild(chip);
   }
   chipsContainer.innerHTML = "";
   chipsContainer.appendChild(fragment);
+};
+
+const handleClearSelectedOptions = (filter) => {
+  const selectedOptions = document.querySelectorAll(".selected-option");
+  for (const option of Array.from(selectedOptions)) {
+    if (option.dataset.selectedOption === filter) option.remove();
+  }
 };
 
 export { handleFilter };
