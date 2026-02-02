@@ -1,58 +1,37 @@
-import { SelectMap } from "./components/select";
-import { filters, setFilters } from "./constants";
+import { dataRecipes, filters, search, setRecipes } from "./constants";
+import {
+  filterBySearch,
+  recipeIngredients,
+  renderCardContainer,
+} from "./utils/utils";
 
 const handleFilter = () => {
-  console.log(filters);
+  let filteredRecipes;
+  if (filters.size === 0) {
+    setRecipes(dataRecipes);
+    filteredRecipes = filterBySearch(search);
+  } else {
+    const filteredSet = new Set();
+    for (const recipe of filterBySearch(search)) {
+      const ingredientsList = recipeIngredients(recipe);
+      for (const filter of filters) {
+        if (
+          ingredientsList.has(filter.toLowerCase()) ||
+          recipe.appliance.toLowerCase() === filter.toLowerCase() ||
+          new Set(recipe.ustensils.map((u) => u.toLowerCase())).has(
+            filter.toLowerCase(),
+          )
+        ) {
+          filteredSet.add(recipe);
+          break; // On ajoute la recette une seule fois
+        }
+      }
+    }
+    filteredRecipes = Array.from(filteredSet);
+  }
+
+  setRecipes(filteredRecipes);
+  renderCardContainer(filteredRecipes);
 };
 
-function handleSelectOption(option) {
-  // get selected options container
-  const selectedContainer =
-    option.parentElement.parentElement.previousElementSibling;
-
-  // check if option is already selected
-  const selectedOptionsValues = Array.from(selectedContainer.children).map(
-    (c) => c.children[0].getAttribute("data-selected-option"),
-  );
-
-  if (selectedOptionsValues.includes(option.dataset.value)) {
-    // option already selected, do not add again
-    return;
-  }
-  // create new selected option element
-  const newLi = document.createElement("li");
-  const newSelection = document.createElement("div");
-  newSelection.setAttribute("class", "selected-option text-body2");
-  newSelection.setAttribute("data-selected-option", option.dataset.value);
-  newSelection.textContent = option.textContent;
-  const deleteBtn = document.createElement("button");
-  deleteBtn.setAttribute("class", "button-base icon-button sm secondary pill");
-  deleteBtn.innerHTML = crossSmall;
-  setFilters((prev) => [...prev, option.dataset.value]);
-  handleFilter();
-
-  // add event listener to delete button
-  const deleteBtnListeners = {
-    click: () => {
-      deleteBtnListeners.removeElement();
-    },
-    removeElement: () => {
-      deleteBtn.removeEventListener("click", deleteBtnListeners.click);
-      SelectMap.delete(deleteBtn);
-      setFilters((prev) =>
-        prev.filter((filter) => filter !== option.dataset.value),
-      );
-      newLi.remove();
-    },
-  };
-  // add to SelectMap for future reference
-  SelectMap.set(deleteBtn, deleteBtnListeners);
-  deleteBtn.addEventListener("click", deleteBtnListeners.click);
-
-  newSelection.appendChild(deleteBtn);
-
-  newLi.appendChild(newSelection);
-  selectedContainer.appendChild(newLi);
-}
-
-export { handleFilter, handleSelectOption };
+export { handleFilter };

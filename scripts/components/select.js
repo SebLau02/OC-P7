@@ -45,7 +45,7 @@ function Select({ label = "Label", options = [] }) {
   optionsContainer.setAttribute("class", "options");
 
   // create options
-  const optionsFragment = createSelectOptions(options);
+  const optionsFragment = createSelectOptions({ options });
   optionsContainer.appendChild(optionsFragment);
   SelectBody.appendChild(optionsContainer);
 
@@ -62,7 +62,7 @@ function Select({ label = "Label", options = [] }) {
  * @param {Array} options
  * @returns {DocumentFragment}
  */
-const createSelectOptions = (options) => {
+const createSelectOptions = ({ options, ...props }) => {
   const fragment = document.createDocumentFragment();
   options.forEach((option) => {
     const opt =
@@ -72,7 +72,7 @@ const createSelectOptions = (options) => {
     optionButton.setAttribute("class", "option text-body2");
     optionButton.setAttribute("data-value", opt.value);
     optionButton.textContent = opt.label;
-    setUpOptionListeners(optionButton);
+    setUpOptionListeners({ option: optionButton, ...props });
 
     optionLi.appendChild(optionButton);
     fragment.appendChild(optionLi);
@@ -109,7 +109,7 @@ function handleSelectInput(select) {
 
   Array.from(options).forEach((option) => {
     // add event listener to each option
-    setUpOptionListeners(option);
+    setUpOptionListeners({ option });
   });
 
   // add event listener to search input
@@ -155,9 +155,12 @@ function handleSelectInput(select) {
   );
 }
 
-const setUpOptionListeners = (option) => {
+const setUpOptionListeners = ({ option, onClick, onDelete }) => {
   const optionListeners = {
-    click: () => handleClickOption(option),
+    click: (e) => {
+      handleClickOption({ option, onDelete });
+      onClick && onClick(e);
+    },
     removeElement: () => {
       option.removeEventListener("click", optionListeners.click);
       option.parentElement.remove();
@@ -178,7 +181,7 @@ const cleanOptions = (optionsContainer) => {
   });
 };
 
-function handleClickOption(option) {
+function handleClickOption({ option, onDelete }) {
   // get selected options container
   const selectedContainer =
     option.parentElement.parentElement.previousElementSibling;
@@ -192,6 +195,7 @@ function handleClickOption(option) {
     // option already selected, do not add again
     return;
   }
+
   // create new selected option element
   const newLi = document.createElement("li");
   const newSelection = document.createElement("div");
@@ -200,12 +204,14 @@ function handleClickOption(option) {
   newSelection.textContent = option.textContent;
   const deleteBtn = document.createElement("button");
   deleteBtn.setAttribute("class", "button-base icon-button sm secondary pill");
+  deleteBtn.setAttribute("data-value", option.dataset.value);
   deleteBtn.innerHTML = crossSmall;
 
   // add event listener to delete button
   const deleteBtnListeners = {
-    click: () => {
+    click: (e) => {
       deleteBtnListeners.removeElement();
+      onDelete && onDelete(e);
     },
     removeElement: () => {
       deleteBtn.removeEventListener("click", deleteBtnListeners.click);

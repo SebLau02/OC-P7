@@ -4,6 +4,11 @@ const chevron = `<svg width="14" height="8" viewBox="0 0 14 8" fill="none" class
 const searchSm = `<svg width="14" height="14" viewBox="0 0 14 14" fill="none" class="icon"> <circle cx="5" cy="5" r="4.75" stroke="#7A7A7A" stroke-width="0.5" /> <line x1="9.17678" y1="9.32322" x2="13.6768" y2="13.8232" stroke="#7A7A7A"  stroke-width="0.5" />
 `;
 
+let dataRecipes = [];
+const setDataRecipes = (newValue) => {
+  dataRecipes = newValue;
+};
+
 let recipes = [];
 const setRecipes = (newValue) => {
   recipes = newValue;
@@ -19,16 +24,24 @@ const setSuggestions = (newValue) => {
   } else suggestions = newValue;
 };
 
-let filters = [];
+let filters = new Set();
 const setFilters = (newFilters) => {
   if (typeof newFilters === "function") {
-    filters = newFilters(filters);
+    const result = newFilters(filters);
+    filters = result instanceof Set ? result : new Set(result);
   } else {
-    filters = newFilters;
+    filters = newFilters instanceof Set ? newFilters : new Set(newFilters);
   }
 };
 
+let search = "";
+const setSearch = (newValue) => {
+  search = newValue;
+};
+
 export {
+  search,
+  setSearch,
   crossSmall,
   mediumCrossIcon,
   chevron,
@@ -39,4 +52,6 @@ export {
   suggestions,
   filters,
   setFilters,
+  dataRecipes,
+  setDataRecipes,
 };

@@ -1,14 +1,17 @@
 import { RecipeCard } from "../components/recipeCard";
 import { cleanOptions, createSelectOptions } from "../components/select";
-import { recipes, setSuggestions, suggestions } from "../constants";
+import {
+  filters,
+  recipes,
+  setFilters,
+  setSuggestions,
+  suggestions,
+} from "../constants";
+import { handleFilter } from "../filterRecipes";
 
 const recipeCount = document.getElementById("recipe-count");
 const recipesContainer = document.getElementById("result-container");
 const emptyResult = document.getElementById("empty-result");
-
-const includes = (array, element) => {
-  for (let i = 0; i < array.length; i++) {}
-};
 
 const isSomeIngredientInclude = (ref, el) => {
   let isIncluded = false;
@@ -80,6 +83,11 @@ const filterBySearch = (searchValue) => {
   return filteredRecipes;
 };
 
+/**
+ * Extract ingredients from a recipe
+ * @param {Object} recipe
+ * @returns
+ */
 const recipeIngredients = (recipe) => {
   let ingredientsList = new Set();
   for (let i = 0; i < recipe.ingredients.length; i++) {
@@ -97,7 +105,10 @@ const createRecipesCard = (recipes) => {
   return fragment;
 };
 
-const renderCardContainer = (recipes) => {
+/**
+ * Render the card container with recipes
+ */
+const renderCardContainer = () => {
   const recipesFragment = createRecipesCard(recipes);
   recipesContainer.innerHTML = "";
   recipesContainer.appendChild(recipesFragment);
@@ -154,6 +165,10 @@ const recipesOptions = (recipes) => {
   };
 };
 
+/**
+ * Render select options for ingredients, utensils, and appliances
+ * @param {Array} recipes
+ */
 const renderSelectOptions = (recipes) => {
   const { ingredients, utensilsSet, appliancesSet } = recipesOptions(recipes);
   const ingredientSelect = document.querySelector(
@@ -164,17 +179,50 @@ const renderSelectOptions = (recipes) => {
     "#select-appliances .options",
   );
 
-  const ingOptionsFragment = createSelectOptions(ingredients);
+  const ingOptionsFragment = createSelectOptions({
+    options: ingredients,
+    onClick: handleSelectOption,
+    onDelete: onDeleteOption,
+  });
   cleanOptions(ingredientSelect);
   ingredientSelect.appendChild(ingOptionsFragment);
 
-  const ustOptionsFragment = createSelectOptions(utensilsSet);
+  const ustOptionsFragment = createSelectOptions({
+    options: utensilsSet,
+    onClick: handleSelectOption,
+    onDelete: onDeleteOption,
+  });
   cleanOptions(ustensilsSelect);
   ustensilsSelect.appendChild(ustOptionsFragment);
 
-  const optionsFragment = createSelectOptions(appliancesSet);
+  const optionsFragment = createSelectOptions({
+    options: appliancesSet,
+    onClick: handleSelectOption,
+    onDelete: onDeleteOption,
+  });
   cleanOptions(appliancesSelect);
   appliancesSelect.appendChild(optionsFragment);
+};
+
+const handleSelectOption = (e) => {
+  setFilters((prev) => {
+    const value = e.target.dataset.value;
+    const newSet = new Set(prev);
+    newSet.add(value);
+    return newSet;
+  });
+  handleFilter();
+};
+
+const onDeleteOption = (e) => {
+  setFilters((prev) => {
+    const value = e.currentTarget.dataset.value;
+    const newSet = new Set(prev);
+    newSet.delete(value);
+    return newSet;
+  });
+
+  handleFilter();
 };
 
 export {
