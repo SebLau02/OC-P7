@@ -1,4 +1,5 @@
-import { Chip } from "./components/chip";
+import { Chip, ChipMap } from "./components/chip";
+import { SelectMap } from "./components/select";
 import {
   dataRecipes,
   filters,
@@ -61,14 +62,28 @@ const renderOptionsChip = () => {
     });
     fragment.appendChild(chip);
   }
-  chipsContainer.innerHTML = "";
+  for (const child of Array.from(chipsContainer.children)) {
+    if (ChipMap.get(child.querySelector("button"))) {
+      ChipMap.get(child.querySelector("button")).removeElement();
+    } else {
+      child.remove();
+    }
+  }
   chipsContainer.appendChild(fragment);
 };
 
+/**
+ * Clear related select option
+ * @param {string} filter
+ */
 const handleClearSelectedOptions = (filter) => {
   const selectedOptions = document.querySelectorAll(".selected-option");
   for (const option of Array.from(selectedOptions)) {
-    if (option.dataset.selectedOption === filter) option.remove();
+    if (option.dataset.selectedOption === filter) {
+      if (SelectMap.get(option.querySelector("button")))
+        SelectMap.get(option.querySelector("button")).removeElement();
+      else option.remove();
+    }
   }
 };
 

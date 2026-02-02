@@ -42,4 +42,4 @@ function Chip({
   return chipContainer;
 }
 
-export { Chip };
+export { Chip, ChipMap };

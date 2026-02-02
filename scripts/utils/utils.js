@@ -1,6 +1,7 @@
 import { RecipeCard } from "../components/recipeCard";
 import { cleanOptions, createSelectOptions } from "../components/select";
 import {
+  dataRecipes,
   filters,
   recipes,
   setFilters,
@@ -30,8 +31,8 @@ const filterBySearch = (searchValue) => {
 
   const filteredRecipes = [];
 
-  for (let i = 0; i < recipes.length; i++) {
-    const recipe = recipes[i];
+  for (let i = 0; i < dataRecipes.length; i++) {
+    const recipe = dataRecipes[i];
     const recipeIngredientsList = recipeIngredients(recipe);
 
     const someIngredientsInclude = isSomeIngredientInclude(

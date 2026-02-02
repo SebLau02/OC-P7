@@ -181,6 +181,10 @@ const cleanOptions = (optionsContainer) => {
   });
 };
 
+/**
+ * Handle click on select option
+ * @param {} param0
+ */
 function handleClickOption({ option, onDelete }) {
   // get selected options container
   const selectedContainer =
