@@ -25,14 +25,36 @@ const isSomeIngredientInclude = (ref, el) => {
 
   return isIncluded;
 };
+
+const isIncludes = (items, el) => {
+  for (const item of items) {
+    if (el === item) {
+      return true;
+    }
+  }
+  return false;
+};
+
+const isStringIncludes = (ref, search) => {
+  if (search === "") return true;
+
+  for (let i = 0; i <= ref.length - search.length; i++) {
+    const part = ref.slice(i, i + search.length);
+
+    if (part === search) {
+      return true;
+    }
+  }
+  return false;
+};
+
 // Filter recipes by search value
 const filterBySearch = (searchValue) => {
   const lowerCaseSearchValue = searchValue.toLowerCase();
 
   const filteredRecipes = [];
 
-  for (let i = 0; i < dataRecipes.length; i++) {
-    const recipe = dataRecipes[i];
+  for (const recipe of dataRecipes) {
     const recipeIngredientsList = recipeIngredients(recipe);
 
     const someIngredientsInclude = isSomeIngredientInclude(
@@ -41,8 +63,11 @@ const filterBySearch = (searchValue) => {
     );
 
     if (
-      recipe.name.toLowerCase().includes(lowerCaseSearchValue) ||
-      recipe.description.toLowerCase().includes(lowerCaseSearchValue) ||
+      isStringIncludes(recipe.name.toLowerCase(), lowerCaseSearchValue) ||
+      isStringIncludes(
+        recipe.description.toLowerCase(),
+        lowerCaseSearchValue,
+      ) ||
       someIngredientsInclude
     ) {
       filteredRecipes.push(recipe);
