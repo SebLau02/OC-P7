@@ -1,5 +1,10 @@
+import { ChipMap } from "../components/chip";
 import { RecipeCard } from "../components/recipeCard";
-import { cleanOptions, createSelectOptions } from "../components/select";
+import {
+  cleanOptions,
+  createSelectOptions,
+  SelectMap,
+} from "../components/select";
 import {
   dataRecipes,
   filters,
@@ -262,6 +267,7 @@ const onDeleteOption = (e) => {
     const value = e.currentTarget.dataset.value;
     const newSet = new Set(prev);
     newSet.delete(value);
+    ChipMap.get(value.toLowerCase()).removeElement(); // remove related chip
     return newSet;
   });
 

@@ -38,6 +38,7 @@ function Chip({
     deleteButton.addEventListener("click", chipListeners.click);
     chipContainer.appendChild(deleteButton);
     ChipMap.set(deleteButton, chipListeners);
+    ChipMap.set(label.toLocaleLowerCase(), chipListeners);
   }
 
   return chipContainer;

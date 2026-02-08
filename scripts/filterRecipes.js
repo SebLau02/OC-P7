@@ -69,6 +69,7 @@ const renderOptionsChip = () => {
     });
     fragment.appendChild(chip);
   }
+  // clear previous chips
   for (const child of Array.from(chipsContainer.children)) {
     if (ChipMap.get(child.querySelector("button"))) {
       ChipMap.get(child.querySelector("button")).removeElement();
