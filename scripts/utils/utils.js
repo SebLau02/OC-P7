@@ -259,6 +259,7 @@ const handleSelectOption = (e) => {
     newSet.add(value);
     return newSet;
   });
+
   handleFilter();
 };
 
@@ -274,6 +275,12 @@ const onDeleteOption = (e) => {
   handleFilter();
 };
 
+const forEach = (array, cb) => {
+  for (const item of array) {
+    cb(item);
+  }
+};
+
 export {
   debounce,
   filterBySearch,
@@ -285,4 +292,5 @@ export {
   map,
   isIncludes,
   isStringIncludes,
+  forEach,
 };

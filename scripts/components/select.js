@@ -1,4 +1,5 @@
 import { chevron, crossSmall, setFilters } from "../constants";
+import { forEach } from "../utils/utils";
 import { SearchInput } from "./searchInput";
 
 const SelectMap = new Map();
@@ -174,7 +175,7 @@ const setUpOptionListeners = ({ option, onClick, onDelete }) => {
 };
 
 const cleanOptions = (optionsContainer) => {
-  Array.from(optionsContainer.children).forEach((option) => {
+  forEach(Array.from(optionsContainer.children), (option) => {
     const listeners = SelectMap.get(option.children[0]);
     if (listeners && listeners.removeElement) {
       listeners.removeElement();
