@@ -48,19 +48,27 @@ const isStringIncludes = (ref, search) => {
   return false;
 };
 
-// Filter recipes by search value
+const map = (array, callback = (item) => item) => {
+  const result = [];
+  for (const item of array) {
+    const value = callback(item);
+    if (value !== undefined) {
+      result.push(value);
+    }
+  }
+  return result;
+};
+
+/**
+ * Return filtered recipes based on search value in name, description, and ingredients
+ * @param {string} searchValue
+ * @returns Array of recipes
+ */
 const filterBySearch = (searchValue) => {
   const lowerCaseSearchValue = searchValue.toLowerCase();
 
-  const filteredRecipes = [];
-
-  for (const recipe of dataRecipes) {
+  const filteredRecipes = map(recipes, (recipe) => {
     const recipeIngredientsList = recipeIngredients(recipe);
-
-    const someIngredientsInclude = isSomeIngredientInclude(
-      Array.from(recipeIngredientsList),
-      lowerCaseSearchValue,
-    );
 
     if (
       isStringIncludes(recipe.name.toLowerCase(), lowerCaseSearchValue) ||
@@ -68,11 +76,14 @@ const filterBySearch = (searchValue) => {
         recipe.description.toLowerCase(),
         lowerCaseSearchValue,
       ) ||
-      someIngredientsInclude
+      isSomeIngredientInclude(
+        Array.from(recipeIngredientsList),
+        lowerCaseSearchValue,
+      )
     ) {
-      filteredRecipes.push(recipe);
+      return recipe;
     }
-  }
+  });
 
   // Suggestion si aucun résultat : trouver la recette la plus proche par similarité de nom
   if (filteredRecipes.length === 0 && searchValue.length > 0) {

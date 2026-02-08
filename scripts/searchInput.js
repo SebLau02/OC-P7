@@ -18,22 +18,20 @@ const inputField = searchInput.querySelector("input");
 const handleSearch = () => {
   const debouncedInput = debounce((e) => {
     const { value } = e.target;
+    // if input is empty
     if (value.length === 0) {
-      setSearch(value);
-      setRecipes(dataRecipes);
-      handleFilter();
-      renderCardContainer();
-      return;
-    } else if (value.length < 3) {
-      setSearch("");
+      setSearch(value); // Clear search state
+      setRecipes(dataRecipes); // Reset recipes to original data
+      handleFilter(); // Reapply filters if any
+      renderCardContainer(); // render the full list of recipes
       return;
     }
-    setSearch(value);
-    const filteredRecipes = filterBySearch(value);
-    setRecipes(filteredRecipes);
-    setSuggestions((prev) => ({ ...prev, search: value }));
-    handleFilter();
-    renderCardContainer();
+    setSearch(value); // set search state
+    const filteredRecipes = filterBySearch(value); // filter recipes based on search value
+    setRecipes(filteredRecipes); // update recipes state
+    setSuggestions((prev) => ({ ...prev, search: value })); // update suggestions state
+    handleFilter(); // apply filters (options)
+    renderCardContainer(); // render new list
   }, 300); // 300ms de délai, ajustable
 
   inputField.addEventListener("input", debouncedInput);
