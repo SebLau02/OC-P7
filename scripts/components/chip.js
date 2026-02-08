@@ -26,6 +26,7 @@ function Chip({
     const chipListeners = {
       click: (e) => {
         onDelete(e);
+        chipListeners.removeElement();
       },
       removeElement: () => {
         deleteButton.removeEventListener("click", chipListeners.click);

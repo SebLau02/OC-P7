@@ -9,14 +9,20 @@ import {
 } from "./constants";
 import {
   filterBySearch,
+  isIncludes,
+  map,
   recipeIngredients,
   renderCardContainer,
 } from "./utils/utils";
 
+/**
+ * Fitler recipes based on selected options
+ */
 const handleFilter = () => {
   let filteredRecipes;
   if (filters.size === 0) {
-    setRecipes(dataRecipes);
+    // if no filters
+    setRecipes(dataRecipes); // set recipes to original data
     filteredRecipes = filterBySearch(search);
   } else {
     const filteredSet = new Set();
@@ -24,9 +30,10 @@ const handleFilter = () => {
       const ingredientsList = recipeIngredients(recipe);
       for (const filter of filters) {
         if (
-          ingredientsList.has(filter.toLowerCase()) ||
+          isIncludes(ingredientsList, filter.toLowerCase()) ||
           recipe.appliance.toLowerCase() === filter.toLowerCase() ||
-          new Set(recipe.ustensils.map((u) => u.toLowerCase())).has(
+          isIncludes(
+            map(recipe.ustensils, (u) => u.toLowerCase()),
             filter.toLowerCase(),
           )
         ) {

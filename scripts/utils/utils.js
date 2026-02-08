@@ -26,6 +26,12 @@ const isSomeIngredientInclude = (ref, el) => {
   return isIncluded;
 };
 
+/**
+ *
+ * @param {Array} items
+ * @param {string} el
+ * @returns boolean
+ */
 const isIncludes = (items, el) => {
   for (const item of items) {
     if (el === item) {
@@ -270,4 +276,7 @@ export {
   renderCardContainer,
   recipeCount,
   recipesContainer,
+  map,
+  isIncludes,
+  isStringIncludes,
 };
