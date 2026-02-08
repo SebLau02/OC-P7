@@ -185,7 +185,8 @@ const cleanOptions = (optionsContainer) => {
 
 /**
  * Handle click on select option
- * @param {} param0
+ * @param {Html element} param0
+ * @param {Function} param1
  */
 function handleClickOption({ option, onDelete }) {
   // get selected options container
@@ -237,7 +238,7 @@ function handleClickOption({ option, onDelete }) {
 // set up for present selects in the DOM
 const selects = document.querySelectorAll(".select-base");
 function SetUpPresentSelectsBehavior() {
-  Array.from(selects).forEach((select) => {
+  forEach(Array.from(selects), (select) => {
     handleSelectInput(select);
   });
 }
