@@ -19,10 +19,10 @@ const recipeCount = document.getElementById("recipe-count");
 const recipesContainer = document.getElementById("result-container");
 const emptyResult = document.getElementById("empty-result");
 
-const isSomeIngredientInclude = (ref, el) => {
+const isSomeIngredientInclude = (recipe, el) => {
   let isIncluded = false;
-  for (let i = 0; i < ref.length; i++) {
-    if (ref[i] === el) {
+  for (let i = 0; i < recipe.ingredients.length; i++) {
+    if (isStringIncludes(recipe.ingredients[i].ingredient.toLowerCase(), el)) {
       isIncluded = true;
       break;
     }
@@ -104,15 +104,13 @@ const filterBySearch = (searchValue) => {
   const lowerCaseSearchValue = searchValue.toLowerCase();
 
   const filteredRecipes = map(recipes, (recipe) => {
-    const recipeIngredientsList = recipeIngredients(recipe);
-
     if (
       isStringIncludes(recipe.name.toLowerCase(), lowerCaseSearchValue) ||
       isStringIncludes(
         recipe.description.toLowerCase(),
         lowerCaseSearchValue,
       ) ||
-      isSomeIngredientInclude(recipeIngredientsList, lowerCaseSearchValue)
+      isSomeIngredientInclude(recipe, lowerCaseSearchValue)
     ) {
       return recipe;
     }
