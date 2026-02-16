@@ -32,37 +32,62 @@ const isSomeIngredientInclude = (ref, el) => {
 };
 
 /**
- *
- * @param {Array} items
- * @param {string} el
- * @returns boolean
+ * Checks if a substring exists within a reference string without using native slice/includes.
+ * Optimized by comparing characters one by one to avoid memory allocation.
+ * * @param {string} ref - The main string to search within.
+ * @param {string} search - The substring to look for.
+ * @returns {boolean} - True if found, false otherwise.
+ */
+const isStringIncludes = (ref, search) => {
+  if (search === "") return true; // Empty string is always included
+  if (search.length > ref.length) return false; // Substring cannot be longer than reference
+
+  // Iterate through the reference string
+  for (let i = 0; i <= ref.length - search.length; i++) {
+    let match = true;
+
+    // Compare each character of the search string
+    for (let j = 0; j < search.length; j++) {
+      if (ref[i + j] !== search[j]) {
+        match = false;
+        break; // Stop comparing as soon as a character differs
+      }
+    }
+
+    if (match) return true; // Match found at current index
+  }
+  return false;
+};
+
+/**
+ * Checks if a specific element exists in an array.
+ * Fast implementation using a standard for loop with early return.
+ * * @param {Array} items - The array to search.
+ * @param {any} el - The element to find.
+ * @returns {boolean} - True if element is found.
  */
 const isIncludes = (items, el) => {
-  for (const item of items) {
-    if (el === item) {
-      return true;
-    }
+  for (let i = 0; i < items.length; i++) {
+    // Immediate return on first match (O(1) in best case)
+    if (items[i] === el) return true;
   }
   return false;
 };
 
-const isStringIncludes = (ref, search) => {
-  if (search === "") return true;
-
-  for (let i = 0; i <= ref.length - search.length; i++) {
-    const part = ref.slice(i, i + search.length);
-
-    if (part === search) {
-      return true;
-    }
-  }
-  return false;
-};
-
+/**
+ * Custom map implementation that transforms an array and filters out undefined values.
+ * Avoids the overhead of high-order functions and iterator objects.
+ * * @param {Array} array - The source array.
+ * @param {Function} callback - Function that produces an element of the new array.
+ * @returns {Array} - The new filtered and transformed array.
+ */
 const map = (array, callback = (item) => item) => {
   const result = [];
-  for (const item of array) {
-    const value = callback(item);
+
+  for (let i = 0; i < array.length; i++) {
+    const value = callback(array[i]);
+
+    // Only push defined values to simulate a combined map/filter
     if (value !== undefined) {
       result.push(value);
     }
@@ -87,10 +112,7 @@ const filterBySearch = (searchValue) => {
         recipe.description.toLowerCase(),
         lowerCaseSearchValue,
       ) ||
-      isSomeIngredientInclude(
-        Array.from(recipeIngredientsList),
-        lowerCaseSearchValue,
-      )
+      isSomeIngredientInclude(recipeIngredientsList, lowerCaseSearchValue)
     ) {
       return recipe;
     }
@@ -137,9 +159,11 @@ const filterBySearch = (searchValue) => {
  * @returns
  */
 const recipeIngredients = (recipe) => {
-  let ingredientsList = new Set();
+  let ingredientsList = [];
   for (let i = 0; i < recipe.ingredients.length; i++) {
-    ingredientsList.add(recipe.ingredients[i].ingredient.toLowerCase());
+    const ingredientName = recipe.ingredients[i].ingredient.toLowerCase();
+    if (!isIncludes(ingredientsList, ingredientName))
+      ingredientsList.push(recipe.ingredients[i].ingredient.toLowerCase());
   }
   return ingredientsList;
 };
