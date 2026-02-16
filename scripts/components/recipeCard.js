@@ -1,6 +1,8 @@
 function RecipeCard({ recipe }) {
-  const { image, name, time, description, ingredients } = recipe;
+  const { image, name, time, description, ingredients, id } = recipe;
 
+  const recipeLink = document.createElement("a");
+  recipeLink.setAttribute("href", `/${id}`);
   const recipeCardContainer = document.createElement("article");
   recipeCardContainer.setAttribute("class", "recipe-card");
 
@@ -75,8 +77,9 @@ function RecipeCard({ recipe }) {
   recipeCardContainer.appendChild(imageContainer);
   cardContent.appendChild(ingredientsListContainer);
   recipeCardContainer.appendChild(cardContent);
+  recipeLink.appendChild(recipeCardContainer);
 
-  return recipeCardContainer;
+  return recipeLink;
 }
 
 export { RecipeCard };
