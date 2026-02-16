@@ -1,23 +1,35 @@
 // Fichier de préparation des deux méthode à comparer dans JSbench
 
 // version avec les méthodes natives
+
 const isStringIncludes = (ref, search) => {
-  if (search === "") return true;
+  if (search === "") return true; // Empty string is always included
+  if (search.length > ref.length) return false; // Substring cannot be longer than reference
 
+  // Iterate through the reference string
   for (let i = 0; i <= ref.length - search.length; i++) {
-    const part = ref.slice(i, i + search.length);
+    let match = true;
 
-    if (part === search) {
-      return true;
+    // Compare each character of the search string
+    for (let j = 0; j < search.length; j++) {
+      if (ref[i + j] !== search[j]) {
+        match = false;
+        break; // Stop comparing as soon as a character differs
+      }
     }
+
+    if (match) return true; // Match found at current index
   }
   return false;
 };
 
 const map = (array, callback = (item) => item) => {
   const result = [];
-  for (const item of array) {
-    const value = callback(item);
+
+  for (let i = 0; i < array.length; i++) {
+    const value = callback(array[i]);
+
+    // Only push defined values to simulate a combined map/filter
     if (value !== undefined) {
       result.push(value);
     }
@@ -25,11 +37,7 @@ const map = (array, callback = (item) => item) => {
   return result;
 };
 const recipeIngredients = (recipe) => {
-  let ingredientsList = new Set();
-  for (let i = 0; i < recipe.ingredients.length; i++) {
-    ingredientsList.add(recipe.ingredients[i].ingredient.toLowerCase());
-  }
-  return ingredientsList;
+  return map(recipe.ingredients, (ing) => ing.ingredient.toLowerCase());
 };
 const isSomeIngredientInclude = (ref, el) => {
   let isIncluded = false;
@@ -41,6 +49,13 @@ const isSomeIngredientInclude = (ref, el) => {
   }
 
   return isIncluded;
+};
+const isIncludes = (items, el) => {
+  for (let i = 0; i < items.length; i++) {
+    // Immediate return on first match (O(1) in best case)
+    if (items[i] === el) return true;
+  }
+  return false;
 };
 
 const filterBySearch = (searchValue) => {
@@ -55,10 +70,7 @@ const filterBySearch = (searchValue) => {
         recipe.description.toLowerCase(),
         lowerCaseSearchValue,
       ) ||
-      isSomeIngredientInclude(
-        Array.from(recipeIngredientsList),
-        lowerCaseSearchValue,
-      )
+      isSomeIngredientInclude(recipeIngredientsList, lowerCaseSearchValue)
     ) {
       return recipe;
     }
@@ -102,6 +114,7 @@ const filterBySearch = (searchValue) => {
 filterBySearch("Jus de citron");
 
 // Version avec les méthodes fonctionnelles
+
 function bySearch(search) {
   return recipes.filter((recipe) => {
     const searchLower = search.toLowerCase();
@@ -114,7 +127,7 @@ function bySearch(search) {
     );
 
     if (nameMatch || descriptionMatch || ingredientsMatch) {
-      //   setSuggestedRecipe(recipe); // on retire celui ci car en test on en a pas besoin
+      // setSuggestedRecipe(recipe);
     }
     return nameMatch || descriptionMatch || ingredientsMatch;
   });
