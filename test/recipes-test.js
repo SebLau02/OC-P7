@@ -38,4 +38,4 @@ const generateData = (count) => {
   console.log(`Fichier ${fileName} généré avec succès !`);
 };
 
-generateData(5000); // Modifie le chiffre ici pour tes différents tests
+generateData(10000); // Modifie le chiffre ici pour tes différents tests
