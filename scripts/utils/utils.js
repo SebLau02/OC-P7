@@ -1,12 +1,7 @@
 import { ChipMap } from "../components/chip";
 import { RecipeCard } from "../components/recipeCard";
+import { cleanOptions, createSelectOptions } from "../components/select";
 import {
-  cleanOptions,
-  createSelectOptions,
-  SelectMap,
-} from "../components/select";
-import {
-  dataRecipes,
   filters,
   recipes,
   setFilters,
@@ -19,6 +14,14 @@ const recipeCount = document.getElementById("recipe-count");
 const recipesContainer = document.getElementById("result-container");
 const emptyResult = document.getElementById("empty-result");
 
+const isEvery = (array, cb) => {
+  for (let i = 0; i < array.length; i++) {
+    if (!cb(array[i])) {
+      return false; // Return false immediately on first failure
+    }
+  }
+  return true; // Return true if all elements pass the test
+};
 const isSomeIngredientInclude = (recipe, el) => {
   let isIncluded = false;
   for (let i = 0; i < recipe.ingredients.length; i++) {
@@ -247,6 +250,7 @@ const renderSelectOptions = (recipes) => {
     options: ingredients,
     onClick: handleSelectOption,
     onDelete: onDeleteOption,
+    name: "ingredients",
   });
   cleanOptions(ingredientSelect);
   ingredientSelect.appendChild(ingOptionsFragment);
@@ -255,6 +259,7 @@ const renderSelectOptions = (recipes) => {
     options: utensilsSet,
     onClick: handleSelectOption,
     onDelete: onDeleteOption,
+    name: "ustensils",
   });
   cleanOptions(ustensilsSelect);
   ustensilsSelect.appendChild(ustOptionsFragment);
@@ -263,6 +268,7 @@ const renderSelectOptions = (recipes) => {
     options: appliancesSet,
     onClick: handleSelectOption,
     onDelete: onDeleteOption,
+    name: "appliances",
   });
   cleanOptions(appliancesSelect);
   appliancesSelect.appendChild(optionsFragment);
@@ -270,10 +276,14 @@ const renderSelectOptions = (recipes) => {
 
 const handleSelectOption = (e) => {
   setFilters((prev) => {
-    const value = e.target.dataset.value;
-    const newSet = new Set(prev);
-    newSet.add(value);
-    return newSet;
+    const { value } = e.target.dataset;
+    const { name } = e.currentTarget;
+    const newSet = new Set([...prev[name], value]);
+
+    return {
+      ...prev,
+      [name]: newSet,
+    };
   });
 
   handleFilter();
@@ -281,11 +291,15 @@ const handleSelectOption = (e) => {
 
 const onDeleteOption = (e) => {
   setFilters((prev) => {
-    const value = e.currentTarget.dataset.value;
-    const newSet = new Set(prev);
+    const { value } = e.currentTarget.dataset;
+    const { name } = e.currentTarget;
+    const newSet = new Set(prev[name]);
     newSet.delete(value);
     ChipMap.get(value.toLowerCase()).removeElement(); // remove related chip
-    return newSet;
+    return {
+      ...prev,
+      [name]: newSet,
+    };
   });
 
   handleFilter();
@@ -309,4 +323,5 @@ export {
   isIncludes,
   isStringIncludes,
   forEach,
+  isEvery,
 };

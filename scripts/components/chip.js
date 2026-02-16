@@ -23,6 +23,8 @@ function Chip({
     deleteButton.setAttribute("class", "button-base icon-button sm text pill");
     deleteButton.innerHTML = mediumCrossIcon;
 
+    deleteButton.setAttribute("data-type", `${label.toLocaleLowerCase()}`);
+
     const chipListeners = {
       click: (e) => {
         onDelete(e);

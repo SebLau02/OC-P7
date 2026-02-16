@@ -63,7 +63,7 @@ function Select({ label = "Label", options = [] }) {
  * @param {Array} options
  * @returns {DocumentFragment}
  */
-const createSelectOptions = ({ options, ...props }) => {
+const createSelectOptions = ({ options, name = "", ...props }) => {
   const fragment = document.createDocumentFragment();
   options.forEach((option) => {
     const opt =
@@ -72,6 +72,7 @@ const createSelectOptions = ({ options, ...props }) => {
     const optionButton = document.createElement("button");
     optionButton.setAttribute("class", "option text-body2");
     optionButton.setAttribute("data-value", opt.value);
+    optionButton.setAttribute("name", name);
     optionButton.textContent = opt.label;
     setUpOptionListeners({ option: optionButton, ...props });
 

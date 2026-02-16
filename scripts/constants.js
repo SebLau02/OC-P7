@@ -24,13 +24,17 @@ const setSuggestions = (newValue) => {
   } else suggestions = newValue;
 };
 
-let filters = new Set();
+let filters = {
+  ingredients: new Set(),
+  appliances: new Set(),
+  ustensils: new Set(),
+};
 const setFilters = (newFilters) => {
   if (typeof newFilters === "function") {
     const result = newFilters(filters);
-    filters = result instanceof Set ? result : new Set(result);
+    filters = result;
   } else {
-    filters = newFilters instanceof Set ? newFilters : new Set(newFilters);
+    filters = newFilters;
   }
 };
 

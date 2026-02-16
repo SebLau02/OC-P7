@@ -9,6 +9,8 @@ import {
 } from "./constants";
 import {
   filterBySearch,
+  forEach,
+  isEvery,
   isIncludes,
   map,
   recipeIngredients,
@@ -20,7 +22,7 @@ import {
  */
 const handleFilter = () => {
   let filteredRecipes;
-  if (filters.size === 0) {
+  if (map(Object.values(filters), (v) => Array.from(v)).flat().length === 0) {
     // if no filters
     setRecipes(dataRecipes); // set recipes to original data
     filteredRecipes = filterBySearch(search);
@@ -28,20 +30,47 @@ const handleFilter = () => {
     const filteredSet = new Set();
     for (const recipe of filterBySearch(search)) {
       const ingredientsList = recipeIngredients(recipe);
-      for (const filter of filters) {
-        if (
-          isIncludes(ingredientsList, filter.toLowerCase()) ||
-          recipe.appliance.toLowerCase() === filter.toLowerCase() ||
-          isIncludes(
-            map(recipe.ustensils, (u) => u.toLowerCase()),
-            filter.toLowerCase(),
-          )
-        ) {
-          filteredSet.add(recipe);
-          break; // On ajoute la recette une seule fois
+      for (let i = 0; i < Object.entries(filters).length; i++) {
+        const [key, values] = Object.entries(filters)[i];
+        const valuesArray = Array.from(values);
+
+        for (const filter of valuesArray) {
+          switch (key) {
+            case "ingredients":
+              if (
+                isEvery(valuesArray, (v) => {
+                  if (!isIncludes(ingredientsList, v.toLowerCase())) {
+                    return false;
+                  }
+                  return true;
+                })
+              ) {
+                filteredSet.add(recipe);
+              }
+              break;
+            case "appliances":
+              if (recipe.appliance.toLowerCase() === filter.toLowerCase()) {
+                filteredSet.add(recipe);
+              }
+              break;
+            case "ustensils":
+              if (
+                isIncludes(
+                  map(recipe.ustensils, (u) => u.toLowerCase()),
+                  filter.toLowerCase(),
+                )
+              ) {
+                filteredSet.add(recipe);
+              }
+              break;
+
+            default:
+              break;
+          }
         }
       }
     }
+
     filteredRecipes = Array.from(filteredSet);
   }
 
@@ -53,21 +82,27 @@ const handleFilter = () => {
 const renderOptionsChip = () => {
   const fragment = document.createDocumentFragment();
   const chipsContainer = document.getElementById("options-chip-container");
-  for (const filter of Array.from(filters)) {
-    const chip = Chip({
-      label: filter,
-      onDelete: (e) => {
-        setFilters((prev) => {
-          const newSet = new Set(prev);
-          newSet.delete(filter);
-          return newSet;
-        });
-        handleFilter();
-        handleClearSelectedOptions(filter);
-      },
-      variant: "button",
+
+  for (let i = 0; i < Object.entries(filters).length; i++) {
+    const [key, values] = Object.entries(filters)[i];
+
+    forEach(values, (filter) => {
+      const chip = Chip({
+        label: filter,
+        onDelete: () => {
+          setFilters((prev) => {
+            const newSet = new Set([...prev[key]]);
+            newSet.delete(filter);
+            return { ...prev, [key]: newSet };
+          });
+
+          handleFilter();
+          handleClearSelectedOptions(filter);
+        },
+        variant: "button",
+      });
+      fragment.appendChild(chip);
     });
-    fragment.appendChild(chip);
   }
   // clear previous chips
   for (const child of Array.from(chipsContainer.children)) {
