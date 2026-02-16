@@ -159,13 +159,7 @@ const filterBySearch = (searchValue) => {
  * @returns
  */
 const recipeIngredients = (recipe) => {
-  let ingredientsList = [];
-  for (let i = 0; i < recipe.ingredients.length; i++) {
-    const ingredientName = recipe.ingredients[i].ingredient.toLowerCase();
-    if (!isIncludes(ingredientsList, ingredientName))
-      ingredientsList.push(recipe.ingredients[i].ingredient.toLowerCase());
-  }
-  return ingredientsList;
+  return map(recipe.ingredients, (ing) => ing.ingredient.toLowerCase());
 };
 
 const createRecipesCard = (recipes) => {
