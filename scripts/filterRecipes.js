@@ -22,56 +22,43 @@ import {
  */
 const handleFilter = () => {
   let filteredRecipes;
-  // if no filters, set recipes to original data and filter by search
+  // Si aucun filtre, on retourne toutes les recettes filtrées par la recherche
   if (map(Object.values(filters), (v) => Array.from(v)).flat().length === 0) {
-    // if no filters
-    setRecipes(dataRecipes); // set recipes to original data
+    setRecipes(dataRecipes);
     filteredRecipes = filterBySearch(search);
   } else {
-    const filteredSet = new Set();
-    for (const recipe of filterBySearch(search)) {
-      const ingredientsList = recipeIngredients(recipe);
-      for (let i = 0; i < Object.entries(filters).length; i++) {
-        const [key, values] = Object.entries(filters)[i];
-        const valuesArray = Array.from(values);
-        for (const filter of valuesArray) {
-          switch (key) {
-            case "ingredients":
-              if (
-                isEvery(valuesArray, (v) => {
-                  if (!isIncludes(ingredientsList, v.toLowerCase())) {
-                    return false;
-                  }
-                  return true;
-                })
-              ) {
-                filteredSet.add(recipe);
-              }
-              break;
-            case "appliances":
-              if (recipe.appliance.toLowerCase() === filter.toLowerCase()) {
-                filteredSet.add(recipe);
-              }
-              break;
-            case "ustensils":
-              if (
-                isIncludes(
-                  map(recipe.ustensils, (u) => u.toLowerCase()),
-                  filter.toLowerCase(),
-                )
-              ) {
-                filteredSet.add(recipe);
-              }
-              break;
+    filteredRecipes = filterBySearch(search).filter((recipe) => {
+      // Vérifie chaque catégorie de filtre
+      // 1. Ingrédients
+      const ingredientFilters = Array.from(filters.ingredients || []);
+      const recipeIngr = recipeIngredients(recipe);
+      const hasAllIngredients =
+        ingredientFilters.length === 0 ||
+        isEvery(ingredientFilters, (f) =>
+          isIncludes(recipeIngr, f.toLowerCase()),
+        );
 
-            default:
-              break;
-          }
-        }
-      }
-    }
+      // 2. Appareils
+      const applianceFilters = Array.from(filters.appliances || []);
+      const hasAllAppliances =
+        applianceFilters.length === 0 ||
+        isEvery(
+          applianceFilters,
+          (f) => recipe.appliance.toLowerCase() === f.toLowerCase(),
+        );
 
-    filteredRecipes = Array.from(filteredSet);
+      // 3. Ustensiles
+      const ustensilFilters = Array.from(filters.ustensils || []);
+      const recipeUstensils = map(recipe.ustensils, (u) => u.toLowerCase());
+      const hasAllUstensils =
+        ustensilFilters.length === 0 ||
+        isEvery(ustensilFilters, (f) =>
+          isIncludes(recipeUstensils, f.toLowerCase()),
+        );
+
+      // La recette doit satisfaire tous les filtres (AND)
+      return hasAllIngredients && hasAllAppliances && hasAllUstensils;
+    });
   }
 
   setRecipes(filteredRecipes);
