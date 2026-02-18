@@ -2,6 +2,7 @@ import { ChipMap } from "../components/chip";
 import { RecipeCard } from "../components/recipeCard";
 import { cleanOptions, createSelectOptions } from "../components/select";
 import {
+  dataRecipes,
   filters,
   recipes,
   setFilters,
@@ -106,7 +107,7 @@ const map = (array, callback = (item) => item) => {
 const filterBySearch = (searchValue) => {
   const lowerCaseSearchValue = searchValue.toLowerCase();
 
-  const filteredRecipes = map(recipes, (recipe) => {
+  const filteredRecipes = map(dataRecipes, (recipe) => {
     if (
       isStringIncludes(recipe.name.toLowerCase(), lowerCaseSearchValue) ||
       isStringIncludes(
@@ -291,8 +292,7 @@ const handleSelectOption = (e) => {
 
 const onDeleteOption = (e) => {
   setFilters((prev) => {
-    const { value } = e.currentTarget.dataset;
-    const { name } = e.currentTarget;
+    const { value, name } = e.currentTarget.dataset;
     const newSet = new Set(prev[name]);
     newSet.delete(value);
     ChipMap.get(value.toLowerCase()).removeElement(); // remove related chip

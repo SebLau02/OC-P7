@@ -213,6 +213,7 @@ function handleClickOption({ option, onDelete }) {
   const deleteBtn = document.createElement("button");
   deleteBtn.setAttribute("class", "button-base icon-button sm secondary pill");
   deleteBtn.setAttribute("data-value", option.dataset.value);
+  deleteBtn.setAttribute("data-name", option.name);
   deleteBtn.innerHTML = crossSmall;
 
   // add event listener to delete button

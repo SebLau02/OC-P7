@@ -22,6 +22,7 @@ import {
  */
 const handleFilter = () => {
   let filteredRecipes;
+  // if no filters, set recipes to original data and filter by search
   if (map(Object.values(filters), (v) => Array.from(v)).flat().length === 0) {
     // if no filters
     setRecipes(dataRecipes); // set recipes to original data
@@ -33,7 +34,6 @@ const handleFilter = () => {
       for (let i = 0; i < Object.entries(filters).length; i++) {
         const [key, values] = Object.entries(filters)[i];
         const valuesArray = Array.from(values);
-
         for (const filter of valuesArray) {
           switch (key) {
             case "ingredients":
