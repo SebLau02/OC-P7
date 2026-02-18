@@ -67,15 +67,25 @@ export default class Recipes extends Array {
       const recipeUstensils = this.recipeUstensils(recipe);
       const recipeAppliance = this.recipeAppliance(recipe);
 
-      const includesIngredients = this.isIncludesTag(tags, recipeIngredients);
-      const includesUstensils = this.isIncludesTag(tags, recipeUstensils);
-      const includesAppliance = this.isIncludesTag(tags, [recipeAppliance]);
+      const includesIngredients = this.isAllIncludes(
+        tags["ingredients"],
+        recipeIngredients,
+      );
+      const includesUstensils = this.isAllIncludes(
+        tags["ustensils"],
+        recipeUstensils,
+      );
+      const includesAppliance = this.isAllIncludes(tags["appliances"], [
+        recipeAppliance,
+      ]);
 
-      return includesIngredients || includesUstensils || includesAppliance;
+      return includesIngredients && includesUstensils && includesAppliance;
     });
   }
 
-  isIncludesTag = (options, list) => options.some((tag) => list.includes(tag));
+  isIncludesTag = (list, refList) => list.some((tag) => refList.includes(tag));
+
+  isAllIncludes = (options, list) => options.every((tag) => list.includes(tag));
 
   /**
    * Get options list for selects

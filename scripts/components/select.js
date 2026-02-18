@@ -189,13 +189,15 @@ function handleClickOption(selectedoptionsContainer, option) {
 
   const deleteBtn = document.createElement("button");
   deleteBtn.setAttribute("class", "button-base icon-button sm secondary pill");
+  deleteBtn.setAttribute("dataset-value", option.dataset.value);
+  deleteBtn.setAttribute("dataset-name", option.dataset.name);
   deleteBtn.innerHTML = crossSmall;
 
   // add event listener to delete button
   const deleteBtnListeners = {
     click: () => {
       selectedoptionsContainer.removeChild(newLi);
-      onDeleteOption(option.dataset.value);
+      onDeleteOption(option.dataset);
     },
     removeElement: () => {
       deleteBtn.removeEventListener("click", deleteBtnListeners.click);
@@ -213,7 +215,8 @@ function handleClickOption(selectedoptionsContainer, option) {
   selectedoptionsContainer.appendChild(newLi);
 
   // filter recipes
-  setSelectedOptions((prev) => [...prev, option.dataset.value]); // add the current option to selected options list
+  const { name, value } = option.dataset;
+  setSelectedOptions((prev) => ({ ...prev, [name]: [...prev[name], value] })); // add the current option to selected options list
   createTags();
   const filteredRecipes = RECIPES.bySearch(search).byTags(selectedOptions);
   setSelectOptions(filteredRecipes);
@@ -234,7 +237,7 @@ function SetUpPresentSelectsBehavior() {
  * @param {Array} options
  * @returns {DocumentFragment}
  */
-function createOptionElement(selectedOptionsContainer, options) {
+function createOptionElement(selectedOptionsContainer, options, name = "") {
   const fragment = document.createDocumentFragment();
 
   options.forEach((option) => {
@@ -242,6 +245,7 @@ function createOptionElement(selectedOptionsContainer, options) {
     const optionButton = document.createElement("button");
     optionButton.setAttribute("class", "option text-body2");
     optionButton.setAttribute("data-value", option.value);
+    optionButton.setAttribute("data-name", name);
     optionButton.textContent = option.label;
 
     const optionListeners = {
@@ -267,16 +271,18 @@ function createOptionElement(selectedOptionsContainer, options) {
  */
 function createTags() {
   const fragment = document.createDocumentFragment();
-  selectedOptions.forEach((option) => {
-    const tag = Chip({
-      label: option,
-      color: "primary",
-      onDelete: () => {
-        onDeleteOption(option);
-      },
-      variant: "button",
+  Object.entries(selectedOptions).forEach(([k, v]) => {
+    v.forEach((option) => {
+      const tag = Chip({
+        label: option,
+        color: "primary",
+        onDelete: () => {
+          onDeleteOption({ value: option, name: k });
+        },
+        variant: "button",
+      });
+      fragment.appendChild(tag);
     });
-    fragment.appendChild(tag);
   });
   tagsContainer.innerHTML = "";
   tagsContainer.appendChild(fragment);
@@ -287,17 +293,19 @@ function createTags() {
  * @param {string} option
  */
 const onDeleteOption = (option) => {
-  const index = selectedOptions.indexOf(option);
+  const { value, name } = option;
+  const index = selectedOptions[name].indexOf(value);
+
   if (index > -1) {
-    selectedOptions.splice(index, 1); // remove option from selectedOptions
-    setSelectedOptions([...selectedOptions]); // update selectedOptions
+    selectedOptions[name].splice(index, 1); // remove option from selectedOptions
+    setSelectedOptions({ ...selectedOptions }); // update selectedOptions
     const filteredRecipes = RECIPES.bySearch(search).byTags(selectedOptions); // get filtered recipes
     updateRecipesContainer(filteredRecipes); // update recipes container
     setSelectOptions(filteredRecipes); // update select options
     createTags();
     // clear the selected option in the select component
     const selectSelectedOption = document.querySelector(
-      `.selected-option[data-selected-option="${option}"] .button-base`,
+      `.selected-option[data-selected-option="${value}"] .button-base`,
     );
     if (selectSelectedOption)
       SelectMap.get(selectSelectedOption).removeElement();

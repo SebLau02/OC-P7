@@ -20,7 +20,11 @@ const setSearch = (newSearch) => {
   search = newSearch;
 };
 
-let selectedOptions = [];
+let selectedOptions = {
+  ingredients: [],
+  appliances: [],
+  ustensils: [],
+};
 const setSelectedOptions = (params) => {
   if (typeof params === "function") {
     selectedOptions = params(selectedOptions);

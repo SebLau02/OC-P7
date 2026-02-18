@@ -103,6 +103,7 @@ function setSelectOptions(recipes) {
     const optionsFragment = createOptionElement(
       selectedOptionsContainer,
       options,
+      k,
     ); // create option elements
     optionsContainer.appendChild(optionsFragment); // append new options
   });
